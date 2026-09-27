@@ -3282,3 +3282,137 @@ document.addEventListener('keydown', function(e){
   z-index:10 !important;
 }
 </style>
+
+<style id="fankle-v60-rigid-final">
+/* V60 — final mobile card geometry.
+   The card boxes are the layout geometry. Artwork is contained inside those
+   boxes, so transformed images can never escape into the next card. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-stage{
+  padding:6px 12px 20px !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-instruction{
+  margin:0 0 0 !important;
+  flex:0 0 auto !important;
+}
+/* Compress the allocated dice area first. Keep the dice deliberately large. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-dice{
+  height:104px !important;
+  flex:0 0 104px !important;
+  gap:16px !important;
+  margin:0 0 8px !important;
+  overflow:visible !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-die{
+  width:128px !important;
+  height:128px !important;
+  flex:0 0 128px !important;
+}
+/* Both cards occupy identical rigid landscape boxes. The width is bounded by
+   the visual dice span on a normal phone, while remaining responsive. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-wrap,
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-wrap{
+  width:min(88vw,468px) !important;
+  height:auto !important;
+  aspect-ratio:1403 / 910 !important;
+  flex:0 0 auto !important;
+  position:relative !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  overflow:hidden !important;
+  transform:none !important;
+  display:block !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-wrap{
+  margin-top:24px !important;
+}
+/* Fankle: one face at a time. Put the artwork inside the rigid landscape box.
+   90deg CW is the readable orientation requested for the supplied front art. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-back,
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-front{
+  position:absolute !important;
+  inset:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-front{display:none !important;}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card.revealed .fm-card-back{display:none !important;}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card.revealed .fm-card-front{display:flex !important;}
+/* Use the portrait source's swapped dimensions when rotating it. This keeps
+   the artwork proportional instead of stretching it into the box. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card img.fm-card-art{
+  width:65% !important;
+  height:154.2% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:contain !important;
+  flex:0 0 auto !important;
+  transform:rotate(90deg) !important;
+  transform-origin:center center !important;
+}
+/* The front background has a known working legacy URL as a fallback. The
+   supplied new image is still attempted by the img element; JS swaps to the
+   fallback only if that image fails to load. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-front{
+  background-image:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgs6wShzIVK8MwykN1sWLc46GxwetItM2TvkW-v9enWrMk7qTkoawYeNtmGxMeWPGIciCBtQoB5-1GSzWcA44_4Iz-rnbJJZ3YpgYFKjpk4K_ZRxlkcA4FD61n5_S5VXU82b88mBFX41_n2rfM8VADDCel4WA48m56B31hKJhfMLSvcgt96fduqCrYoVfI/s1600/Blank%20fankle%20face.png") !important;
+  background-position:center !important;
+  background-repeat:no-repeat !important;
+  background-size:contain !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) #fmCardFront{color:transparent !important;font-size:0 !important;}
+/* Readable content stays upright over the landscape face. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-content{
+  left:50% !important;top:50% !important;width:72% !important;height:76% !important;
+  transform:translate(-50%,-50%) !important;
+  padding:0 !important;display:flex !important;flex-direction:column !important;
+  align-items:center !important;justify-content:center !important;text-align:center !important;
+  box-sizing:border-box !important;z-index:3 !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-number{width:25% !important;height:auto !important;max-width:none !important;margin:0 0 5% !important;}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-type,
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-action{width:90% !important;max-width:90% !important;text-align:center !important;box-sizing:border-box !important;}
+/* Forfeit: front and back are literally the same box and therefore exactly
+   the same displayed size. Both use the same proportional portrait-source
+   sizing, then rotate into the landscape presentation. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-back,
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-front{
+  position:absolute !important;left:50% !important;top:50% !important;
+  width:65% !important;height:154.2% !important;
+  max-width:none !important;max-height:none !important;
+  object-fit:contain !important;
+  transform:translate(-50%,-50%) rotate(-90deg) !important;
+  transform-origin:center center !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-front{display:none !important;}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-wrap.drawn .fm-forfeit-back{display:none !important;}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-wrap.drawn .fm-forfeit-front{display:block !important;}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-text{
+  position:absolute !important;left:50% !important;top:50% !important;width:76% !important;height:76% !important;
+  transform:translate(-50%,-50%) !important;display:none !important;align-items:center !important;justify-content:center !important;
+  text-align:center !important;font-size:clamp(15px,3.2vw,25px) !important;line-height:1.1 !important;font-weight:700 !important;
+  padding:10px !important;box-sizing:border-box !important;z-index:4 !important;pointer-events:none !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-wrap.drawn .fm-forfeit-text{display:flex !important;}
+/* Keep the CTA in normal flow after both rigid cards. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-cta{
+  position:relative !important;left:auto !important;right:auto !important;bottom:auto !important;
+  flex:0 0 auto !important;margin:24px 0 10px !important;z-index:20 !important;
+}
+</style>
+<script>
+/* V60 front-image fallback: the newly supplied Blogger asset is preferred;
+   if it returns an error, use the previously working copy so the card never
+   becomes a broken-image icon. */
+(function(){
+  var f=document.getElementById('fmCardFront');
+  if(!f) return;
+  var primary=f.src;
+  var fallback='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgs6wShzIVK8MwykN1sWLc46GxwetItM2TvkW-v9enWrMk7qTkoawYeNtmGxMeWPGIciCBtQoB5-1GSzWcA44_4Iz-rnbJJZ3YpgYFKjpk4K_ZRxlkcA4FD61n5_S5VXU82b88mBFX41_n2rfM8VADDCel4WA48m56B31hKJhfMLSvcgt96fduqCrYoVfI/s1600/Blank%20fankle%20face.png';
+  f.addEventListener('error',function(){ if(f.src!==fallback){ f.src=fallback; } else { f.style.display='none'; } });
+  /* If the current image is already in an error state when this script runs. */
+  if(f.complete && f.naturalWidth===0 && f.src!==fallback) f.src=fallback;
+})();
+</script>
