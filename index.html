@@ -1842,6 +1842,99 @@ html, body{
   text-shadow:0 2px 10px rgba(0,0,0,.8);
 }
 </style>
+
+<style id="fankle-mobile-v55">
+/* =========================================================
+   FANKLE MOBILE v55
+   One-screen mobile presentation. Desktop presentation is untouched.
+   ========================================================= */
+#fankle-mobile-app{display:none}
+@media (max-width:700px){
+  #fankle-game-root main.table{display:none !important}
+  #fankle-mobile-app{display:flex !important}
+}
+body.mobile-test #fankle-game-root main.table{display:none !important}
+body.mobile-test #fankle-mobile-app{display:flex !important}
+
+#fankle-mobile-app{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100dvh;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 30%,rgba(141,79,209,.13),transparent 38%),
+    radial-gradient(circle at 50% 85%,rgba(239,139,36,.09),transparent 35%),
+    #0d0b0f;
+  color:#fff;
+  align-items:center;
+  justify-content:center;
+  font-family:Georgia,"Times New Roman",serif;
+  z-index:2147483000;
+}
+#fankle-mobile-app *{box-sizing:border-box}
+.mobile-screen{position:absolute;inset:0;display:none;align-items:center;justify-content:center}
+.mobile-screen.active{display:flex}
+.mobile-dice-screen{flex-direction:column;padding:80px 24px 70px;text-align:center}
+.mobile-dice-title{font:700 13px/1 Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#b7aeb9;margin-bottom:28px}
+.mobile-dice-row{display:flex;gap:clamp(18px,7vw,38px);align-items:center;justify-content:center}
+.mobile-die{width:min(32vw,145px);aspect-ratio:1;border-radius:22%;display:grid;place-items:center;position:relative;box-shadow:inset 10px 10px 28px rgba(255,255,255,.13),inset -14px -16px 30px rgba(0,0,0,.32),0 16px 35px rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.24);transform-style:preserve-3d}
+.mobile-die.orange{background:linear-gradient(135deg,rgba(255,170,69,.82),rgba(150,60,8,.78))}
+.mobile-die.purple{background:linear-gradient(135deg,rgba(190,111,255,.8),rgba(65,27,105,.82))}
+.mobile-pips{width:72%;height:72%;display:grid;grid-template-columns:repeat(3,1fr);gap:8%}
+.mobile-pip{display:grid;place-items:center}
+.mobile-pip::after{content:"";width:34%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.92);box-shadow:0 1px 4px rgba(0,0,0,.45);opacity:0}
+.mobile-d1 .mobile-pip:nth-child(5)::after{opacity:1}
+.mobile-d2 .mobile-pip:nth-child(1)::after,.mobile-d2 .mobile-pip:nth-child(9)::after{opacity:1}
+.mobile-d3 .mobile-pip:nth-child(1)::after,.mobile-d3 .mobile-pip:nth-child(5)::after,.mobile-d3 .mobile-pip:nth-child(9)::after{opacity:1}
+.mobile-d4 .mobile-pip:nth-child(1)::after,.mobile-d4 .mobile-pip:nth-child(3)::after,.mobile-d4 .mobile-pip:nth-child(7)::after,.mobile-d4 .mobile-pip:nth-child(9)::after{opacity:1}
+.mobile-d5 .mobile-pip:nth-child(1)::after,.mobile-d5 .mobile-pip:nth-child(3)::after,.mobile-d5 .mobile-pip:nth-child(5)::after,.mobile-d5 .mobile-pip:nth-child(7)::after,.mobile-d5 .mobile-pip:nth-child(9)::after{opacity:1}
+.mobile-d6 .mobile-pip:nth-child(1)::after,.mobile-d6 .mobile-pip:nth-child(3)::after,.mobile-d6 .mobile-pip:nth-child(4)::after,.mobile-d6 .mobile-pip:nth-child(6)::after,.mobile-d6 .mobile-pip:nth-child(7)::after,.mobile-d6 .mobile-pip:nth-child(9)::after{opacity:1}
+.mobile-result{font:900 clamp(60px,18vw,100px)/1 Georgia,serif;color:#fff;text-shadow:0 3px 16px rgba(239,139,36,.45);margin:28px 0 12px;min-height:1em}
+.mobile-dice-prompt{font:700 15px/1.4 Arial,sans-serif;color:#b7aeb9;max-width:310px;margin:0 auto}
+.mobile-shake-status{font:700 11px/1 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#f5c76b;margin-top:20px;min-height:1em}
+.mobile-enable-shake{margin-top:18px;border:0;background:transparent;color:#fff;padding:10px 16px;font:700 12px/1 Georgia,serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+
+.mobile-card-screen{padding:0}
+.mobile-card-frame{position:absolute;left:50%;top:50%;width:min(92vw,calc(92dvh * 910 / 1403));aspect-ratio:910/1403;transform:translate(-50%,-50%);perspective:1600px}
+.mobile-card-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.mobile-card-inner.revealed{transform:rotateY(180deg)}
+.mobile-card-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+.mobile-card-face img.mobile-card-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.mobile-card-front{transform:rotateY(180deg)}
+.mobile-card-content{position:absolute;left:10.1648%;top:7.2345%;width:79.6703%;height:85.5311%;display:flex;flex-direction:column;align-items:center;text-align:center}
+.mobile-card-number{width:100%;height:32%;object-fit:contain;display:block;flex:0 0 auto}
+.mobile-card-action{width:100%;height:60%;display:flex;align-items:center;justify-content:center;padding:2% 2%;font-weight:800;font-size:clamp(17px,5vw,28px);line-height:1.1;color:#fff8f0;text-shadow:0 2px 4px #000,0 0 12px rgba(0,0,0,.9);overflow:hidden;overflow-wrap:anywhere}
+.mobile-card-type{margin-top:auto;padding-bottom:2%;font:700 10px/1 Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#f3d6b0;opacity:.9}
+
+.mobile-cta-shade{position:fixed;inset:0;background:rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .7s ease;z-index:20}
+.mobile-cta-shade.show{opacity:1}
+.mobile-cta{position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translate(-50%,28px) scale(.94);width:min(94vw,520px);display:flex;justify-content:center;align-items:center;gap:12px;opacity:0;pointer-events:none;z-index:21;transition:opacity .55s ease,transform .7s cubic-bezier(.18,.8,.22,1)}
+.mobile-cta.show{opacity:1;transform:translate(-50%,0) scale(1);pointer-events:auto}
+.mobile-cta.two{gap:8px}
+.mobile-cta-button{position:relative;border:0;background:transparent;padding:0;width:min(78vw,360px);aspect-ratio:1680/679;cursor:pointer;filter:drop-shadow(0 9px 18px rgba(0,0,0,.48));transition:transform .18s ease,filter .18s ease}
+.mobile-cta.two .mobile-cta-button{width:min(46vw,250px)}
+.mobile-cta-button:hover,.mobile-cta-button:active{transform:scale(1.035);filter:drop-shadow(0 11px 22px rgba(0,0,0,.6)) brightness(1.08)}
+.mobile-cta-button img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.mobile-cta-button span{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font:800 clamp(12px,3.2vw,18px)/1 Georgia,"Times New Roman",serif;letter-spacing:.11em;text-transform:uppercase;text-shadow:0 2px 3px rgba(0,0,0,.55);padding:0 10%}
+.mobile-exit{position:fixed;right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));z-index:30;width:54px;height:54px;display:grid;place-items:center;border-radius:14px;background:rgba(13,11,15,.72);box-shadow:0 4px 18px rgba(0,0,0,.45);text-decoration:none}
+.mobile-exit img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 6px rgba(239,139,36,.55));animation:mobileExitPulse 2.6s ease-in-out infinite}
+@keyframes mobileExitPulse{0%,100%{filter:drop-shadow(0 0 4px rgba(239,139,36,.35)) brightness(.92)}50%{filter:drop-shadow(0 0 11px rgba(239,139,36,.9)) brightness(1.12)}}
+.mobile-forfeit-frame{position:absolute;left:50%;top:50%;width:min(92vw,calc(92dvh * 910 / 1403));aspect-ratio:910/1403;transform:translate(-50%,-50%);perspective:1600px}
+.mobile-forfeit-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.mobile-forfeit-inner.revealed{transform:rotateY(180deg)}
+.mobile-forfeit-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+.mobile-forfeit-face img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mobile-forfeit-front{transform:rotateY(180deg)}
+.mobile-forfeit-text{position:absolute;left:10.1648%;top:7.2345%;width:79.6703%;height:85.5311%;display:flex;align-items:center;justify-content:center;text-align:center;padding:5%;font-weight:800;font-size:clamp(17px,4.7vw,27px);line-height:1.12;color:#fff8f0;text-shadow:0 2px 4px #000,0 0 12px rgba(0,0,0,.9);overflow:hidden;overflow-wrap:anywhere}
+@media(max-height:650px){
+  .mobile-dice-screen{padding-top:58px;padding-bottom:56px}
+  .mobile-dice-title{margin-bottom:14px}
+  .mobile-result{margin:12px 0 6px}
+  .mobile-shake-status{margin-top:10px}
+}
+</style>
+
 </head>
 <body>
 <div id="fankle-game-root">
@@ -1917,6 +2010,51 @@ html, body{
     </div>
   </div>
 </main>
+
+<div id="fankle-mobile-app" aria-label="Fankle mobile game">
+  <a class="mobile-exit" href="https://spookyshenanigans.blogspot.com/" aria-label="Exit Fankle">
+    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhULLCLnC9Xfz-G6nxtjlElpkWEUZT_DiSALVl3ykfG3m_fgcekw99G0B8pL6NKQUfF6iizYR-RlfYaP_Vpgp2SYupThPMc-iMVOy0-szolMEdmInq0QySzAjeFAts9zd5o3M29MnJy0nhMHudHpnJqM1044i8udIIxZwPVd_ZoQZqKa611kCwnI60BnQ/s1600/TGW%20Exit%20crop.png" alt="Exit">
+  </a>
+  <section class="mobile-screen mobile-dice-screen active" id="mobileDiceScreen">
+    <div class="mobile-dice-title">Dice Devil</div>
+    <div class="mobile-dice-row">
+      <div class="mobile-die orange" id="mobileDie1"><div class="mobile-pips" id="mobilePips1"></div></div>
+      <div class="mobile-die purple" id="mobileDie2"><div class="mobile-pips" id="mobilePips2"></div></div>
+    </div>
+    <div class="mobile-result" id="mobileResult" aria-live="polite"></div>
+    <p class="mobile-dice-prompt">Shake the phone to roll the dice.</p>
+    <div class="mobile-shake-status" id="mobileShakeStatus">Shake ready</div>
+    <button class="mobile-enable-shake" id="mobileEnableShake" type="button">ENABLE SHAKE</button>
+  </section>
+  <section class="mobile-screen mobile-card-screen" id="mobileFankleScreen" aria-live="polite">
+    <div class="mobile-card-frame">
+      <div class="mobile-card-inner" id="mobileFankleInner">
+        <div class="mobile-card-face mobile-card-back"><img class="mobile-card-art" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLqU2V7YpBKrofZyANloua6xFxraMxyT-Jkf0aB_k7sXIGe-wl_qlbzBCDSrRf4U2ADHT6kEeSGx6mVbjy92VQwF59VQwFqKdv50q-QmpHTQlpRpnMZLqcjMTcQ6B_5thI4E8JN61DKJ29mPAPFfdZ4ZED3H-cwsrrwKZpXbbu51OL9VEIn4InDgCM/s1403/Fankle%20Mobile%20Card%20Back.png" alt="Fankle card back"></div>
+        <div class="mobile-card-face mobile-card-front">
+          <img class="mobile-card-art" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEge9CpSc47a-fOqkEkJfGNx5MrwRRMB-JDrghgq54GuMOqg-oXZfjoa9_knOFP7fFUhOvmsbqu3Mirhgrh-1r0DasZOLF-yV6r6992sdEN5lcstVQDihviz-Xf3fJfFViYTguOtViMNZTSulz_gc_LAlgBZ_x__64ybSeJc6nwdHRsyTzBdDTa4_Bady0oq/s1403/mobile%20fankle%20front.png" alt="Fankle mobile card front">
+          <div class="mobile-card-content">
+            <img class="mobile-card-number" id="mobileCardNumber" alt="">
+            <div class="mobile-card-action" id="mobileCardAction"></div>
+            <div class="mobile-card-type" id="mobileCardType"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="mobile-screen mobile-card-screen" id="mobileForfeitScreen" aria-live="polite">
+    <div class="mobile-forfeit-frame">
+      <div class="mobile-forfeit-inner" id="mobileForfeitInner">
+        <div class="mobile-forfeit-face mobile-forfeit-back"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgwHOq2N6GxRdT1Sbw9lnpmEOOeWsHX-NCZVigt9eGLD8bMbYhW4gpqt-77gvMerHibRp_rp76ppdBOQs0Bx7_PLltXUn3OxAfq2ljrr-Zc9OIGHq_fqHr9pJ8f8LxPuIliMmAWhOkkBAgMaG7swfx3uX5Ob768LkuUGie6Mtp8c1jzNw/s1600/fankle%20forfeit%20deck%20back.png" alt="Forfeit deck back"></div>
+        <div class="mobile-forfeit-face mobile-forfeit-front">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0ozPwgdjaS53BkXZkd50xCYJ6ty6dXFpL7vIVB9NZypuLKTCPzzKaFgmbHhuTickNwBHIUEIbsvpuxfHx3YRpeOTgyLMyjvtCDYP0RePHd78ZsT_ejaiAD7rVIiS4Ye-taHittEgPHNSneDLeOnbbEQ4YGNBVCecJn92icGKcKHbocw/s1600/Blank%20fankle%20forfeit%202.png" alt="Forfeit card front">
+          <div class="mobile-forfeit-text" id="mobileForfeitText"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="mobile-cta-shade" id="mobileCtaShade"></div>
+  <div class="mobile-cta" id="mobileCta"></div>
+</div>
 
 <script>
 (() => {
@@ -2032,6 +2170,7 @@ html, body{
     clearTimeout(fankleBackTimer);
     fankleBackTimer = null;
     const item = pool[Math.floor(Math.random()*pool.length)];
+    if(mobileMode) mobileShowFankle(total,item);
     $("cardNumber").src = numberUrl(total);
     $("cardNumber").alt = `Fankle number ${total}`;
     $("cardAction").textContent = item.text;
@@ -2194,6 +2333,193 @@ html, body{
       $("roll").disabled = false;
       rolling = false;
     }, 2500);
+  }
+
+
+  /* =========================================================
+     MOBILE STATE / PRESENTATION — v55
+     Timers only reveal CTAs. They never remove cards or advance state.
+     ========================================================= */
+  const mobileMode = window.matchMedia && window.matchMedia("(max-width:700px)").matches || new URLSearchParams(location.search).get("mobile") === "1";
+  if(mobileMode) document.body.classList.add("mobile-test");
+
+  const MOBILE_BUTTONS = [
+    "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhqPKDxwrpZkZ7Yv5y1NnngFGQ3oNGE4jqOv-8YTYGFO-W1QsCiOd8fn0YJes_UFzqGczWcwQRMmsizhpcDV67-WtgbrYlsIYcEZMaOGwryzEvOd8Awmt_Ouz9OZVvaFjfHC04iEZVW3E87FBW5YkyBO_RCYBRPakXsbdBC7mvbsfjpVrtAaOtQEIPCHHMq/s1600/resin%20lozenge%20button%20%282%29.png",
+    "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi19mFRGIkhn6RA4KQFi8yZdK7T1H0IJH6rwm3WVocnGYTL943E-g1fCj8e2ZQCsOG846j1x3UO9-mDxjYlf11WKaWM3whpfDO5zginjfGcH-4F4R6x6eYOvqNno2_zl4WCY_MKieWhufjcLcLJmVrHOLaye52oBU6sVaBdrgGwVoCUpgdhjWOjDVhZw5jr/s1600/resin%20lozenge%20button%20%283%29.png"
+  ];
+  const MOBILE_EXIT = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhULLCLnC9Xfz-G6nxtjlElpkWEUZT_DiSALVl3ykfG3m_fgcekw99G0B8pL6NKQUfF6iizYR-RlfYaP_Vpgp2SYupThPMc-iMVOy0-szolMEdmInq0QySzAjeFAts9zd5o3M29MnJy0nhMHudHpnJqM1044i8udIIxZwPVd_ZoQZqKa611kCwnI60BnQ/s1600/TGW%20Exit%20crop.png";
+  const MOBILE_FANKLE_BACK = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiLqU2V7YpBKrofZyANloua6xFxraMxyT-Jkf0aB_k7sXIGe-wl_qlbzBCDSrRf4U2ADHT6kEeSGx6mVbjy92VQwF59VQwFqKdv50q-QmpHTQlpRpnMZLqcjMTcQ6B_5thI4E8JN61DKJ29mPAPFfdZ4ZED3H-cwsrrwKZpXbbu51OL9VEIn4InDgCM/s1403/Fankle%20Mobile%20Card%20Back.png";
+  const MOBILE_FANKLE_FRONT = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEge9CpSc47a-fOqkEkJfGNx5MrwRRMB-JDrghgq54GuMOqg-oXZfjoa9_knOFP7fFUhOvmsbqu3Mirhgrh-1r0DasZOLF-yV6r6992sdEN5lcstVQDihviz-Xf3fJfFViYTguOtViMNZTSulz_gc_LAlgBZ_x__64ybSeJc6nwdHRsyTzBdDTa4_Bady0oq/s1403/mobile%20fankle%20front.png";
+  const MOBILE_FORFEIT_FRONT = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0ozPwgdjaS53BkXZkd50xCYJ6ty6dXFpL7vIVB9NZypuLKTCPzzKaFgmbHhuTickNwBHIUEIbsvpuxfHx3YRpeOTgyLMyjvtCDYP0RePHd78ZsT_ejaiAD7rVIiS4Ye-taHittEgPHNSneDLeOnbbEQ4YGNBVCecJn92icGKcKHbocw/s1600/Blank%20fankle%20forfeit%202.png";
+  const MOBILE_FORFEIT_BACK = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgwHOq2N6GxRdT1Sbw9lnpmEOOeWsHX-NCZVigt9eGLD8bMbYhW4gpqt-77gvMerHibRp_rp76ppdBOQs0Bx7_PLltXUn3OxAfq2ljrr-Zc9OIGHq_fqHr9pJ8f8LxPuIliMmAWhOkkBAgMaG7swfx3uX5Ob768LkuUGie6Mtp8c1jzNw/s1600/fankle%20forfeit%20deck%20back.png";
+
+  const mobileState = {
+    screen:"dice",
+    ctaTimer:null,
+    shakeReady:false,
+    lastShake:0,
+    lastRollAt:0,
+    currentItem:null,
+    currentTotal:null,
+    motionHandler:null
+  };
+
+  function mobileShowScreen(name){
+    ["mobileDiceScreen","mobileFankleScreen","mobileForfeitScreen"].forEach(id => $(id).classList.remove("active"));
+    const map={dice:"mobileDiceScreen",fankle:"mobileFankleScreen",forfeit:"mobileForfeitScreen"};
+    $(map[name]).classList.add("active");
+    mobileState.screen=name;
+  }
+
+  function mobileSetDie(el,pipsEl,value,colour){
+    el.className = `mobile-die ${colour} mobile-d${value}`;
+    pipsEl.innerHTML = Array.from({length:9},()=>'<span class="mobile-pip"></span>').join("");
+  }
+
+  function mobileUpdateDice(a,b,total){
+    mobileSetDie($("mobileDie1"),$("mobilePips1"),a,"orange");
+    mobileSetDie($("mobileDie2"),$("mobilePips2"),b,"purple");
+    $("mobileResult").textContent = total || "";
+  }
+
+  function mobileFitText(el){
+    el.style.fontSize="";
+    let size=parseFloat(getComputedStyle(el).fontSize);
+    while((el.scrollHeight > el.clientHeight || el.scrollWidth > el.clientWidth) && size>13){
+      size-=1; el.style.fontSize=size+"px";
+    }
+  }
+
+  function mobileClearCta(){
+    clearTimeout(mobileState.ctaTimer);
+    mobileState.ctaTimer=null;
+    $("mobileCta").className="mobile-cta";
+    $("mobileCta").innerHTML="";
+    $("mobileCtaShade").classList.remove("show");
+  }
+
+  function mobileButton(label,index,onClick){
+    const b=document.createElement("button");
+    b.type="button";
+    b.className="mobile-cta-button";
+    const img=document.createElement("img");
+    img.src=MOBILE_BUTTONS[index];
+    img.alt="";
+    const span=document.createElement("span");
+    span.textContent=label;
+    b.append(img,span);
+    b.addEventListener("click",onClick);
+    return b;
+  }
+
+  function mobileRevealCta(buttonSpecs){
+    mobileClearCta();
+    const cta=$("mobileCta");
+    cta.classList.toggle("two",buttonSpecs.length===2);
+    buttonSpecs.forEach(spec=>cta.appendChild(mobileButton(spec.label,spec.colour,spec.action)));
+    requestAnimationFrame(()=>{
+      $("mobileCtaShade").classList.add("show");
+      cta.classList.add("show");
+    });
+  }
+
+  function mobileStartCtaTimer(buttonSpecs){
+    mobileClearCta();
+    mobileState.ctaTimer=setTimeout(()=>mobileRevealCta(buttonSpecs),20000);
+  }
+
+  function mobileShowFankle(total,item){
+    mobileState.currentTotal=total;
+    mobileState.currentItem=item;
+    mobileClearCta();
+    $("mobileCardNumber").src=numberUrl(total);
+    $("mobileCardNumber").alt=`Fankle number ${total}`;
+    $("mobileCardAction").textContent=item.text;
+    $("mobileCardType").textContent=item.type;
+    mobileFitText($("mobileCardAction"));
+    const inner=$("mobileFankleInner");
+    inner.classList.remove("revealed");
+    mobileShowScreen("fankle");
+    requestAnimationFrame(()=>requestAnimationFrame(()=>inner.classList.add("revealed")));
+
+    const requiresForfeit=/forfeit/i.test(item.text);
+    if(requiresForfeit){
+      mobileStartCtaTimer([
+        {label:"DRAW FORFEIT",colour:0,action:()=>mobileDrawForfeit()},
+        {label:"ROLL AGAIN",colour:1,action:()=>mobileReturnToDice()}
+      ]);
+    }else{
+      const colour=Math.random()<0.5?0:1;
+      mobileStartCtaTimer([{label:"ROLL AGAIN",colour,action:()=>mobileReturnToDice()}]);
+    }
+  }
+
+  function mobileDrawForfeit(){
+    mobileClearCta();
+    const text=forfeits[Math.floor(Math.random()*forfeits.length)];
+    $("mobileForfeitText").textContent=text;
+    mobileFitText($("mobileForfeitText"));
+    const inner=$("mobileForfeitInner");
+    inner.classList.remove("revealed");
+    mobileShowScreen("forfeit");
+    requestAnimationFrame(()=>requestAnimationFrame(()=>inner.classList.add("revealed")));
+    mobileStartCtaTimer([
+      {label:"ROLL AGAIN",colour:Math.random()<0.5?0:1,action:()=>mobileReturnToDice()}
+    ]);
+  }
+
+  function mobileReturnToDice(){
+    mobileClearCta();
+    mobileShowScreen("dice");
+    $("mobileShakeStatus").textContent=mobileState.shakeReady?"Shake ready":"Enable shake";
+  }
+
+  function mobileDoRoll(){
+    if(mobileState.screen!=="dice" || rolling) return;
+    roll();
+  }
+
+  async function mobileEnableShake(){
+    try{
+      if(typeof DeviceMotionEvent!=="undefined" && typeof DeviceMotionEvent.requestPermission==="function"){
+        const result=await DeviceMotionEvent.requestPermission();
+        if(result!=="granted") throw new Error("motion permission denied");
+      }
+      if(!mobileState.motionHandler){
+        mobileState.motionHandler=(e)=>{
+          if(mobileState.screen!=="dice" || rolling) return;
+          const a=e.accelerationIncludingGravity;
+          if(!a) return;
+          const magnitude=Math.sqrt((a.x||0)**2+(a.y||0)**2+(a.z||0)**2);
+          const now=Date.now();
+          if(magnitude>18 && now-mobileState.lastShake>1200){
+            mobileState.lastShake=now;
+            mobileDoRoll();
+          }
+        };
+        window.addEventListener("devicemotion",mobileState.motionHandler,{passive:true});
+      }
+      mobileState.shakeReady=true;
+      $("mobileEnableShake").style.display="none";
+      $("mobileShakeStatus").textContent="Shake ready";
+    }catch(err){
+      $("mobileShakeStatus").textContent="Shake unavailable — tap the dice to roll";
+    }
+  }
+
+  [$("mobileDie1"),$("mobileDie2")].forEach(el=>el.addEventListener("click",mobileDoRoll));
+  $("mobileEnableShake").addEventListener("click",mobileEnableShake);
+
+  // Desktop roll() remains the single dice/game engine. When mobile is active,
+  // drawCard below mirrors the SAME selected card into the mobile presentation.
+  // Avoid the desktop 12 celebration covering the mobile card.
+  const originalShowFankleVictory = showFankleVictory;
+  showFankleVictory = function(){ if(!mobileMode) originalShowFankleVictory(); };
+
+  if(mobileMode){
+    mobileUpdateDice(1,1,"");
+    mobileShowScreen("dice");
+    $("mobileShakeStatus").textContent="Enable shake";
   }
 
   $("roll").addEventListener("click", roll);
