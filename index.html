@@ -1988,7 +1988,7 @@ html, body{
     </div>
   </div>
 </main>
-
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 (() => {
   const FRONT = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgs6wShzIVK8MwykN1sWLc46GxwetItM2TvkW-v9enWrMk7qTkoawYeNtmGxMeWPGIciCBtQoB5-1GSzWcA44_4Iz-rnbJJZ3YpgYFKjpk4K_ZRxlkcA4FD61n5_S5VXU82b88mBFX41_n2rfM8VADDCel4WA48m56B31hKJhfMLSvcgt96fduqCrYoVfI/s1600/Blank%20fankle%20face.png";
@@ -2311,6 +2311,19 @@ html, body{
   };
 })();
 </script>
+<script>
+(()=>{
+  const q=new URLSearchParams(location.search);
+  if(q.get('tv')!=='1'||typeof Peer==='undefined'||!window.FankleCore)return;
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let code='';for(let i=0;i<4;i++)code+=chars[Math.floor(Math.random()*chars.length)];
+  const badge=document.getElementById('fankle-tv-remote-code'),val=document.getElementById('fankle-tv-remote-code-value');
+  if(badge&&val){val.textContent=code;badge.style.display='block';badge.setAttribute('aria-hidden','false');}
+  const peer=new Peer('fktv-'+code);
+  peer.on('connection',conn=>{
+    conn.on('data',m=>{if(m&&m.t==='roll'){window.FankleCore.roll();setTimeout(()=>{const s=window.FankleCore.snapshot();if(conn.open)conn.send({t:'dice',die1:s.die1,die2:s.die2,total:s.total});},1400);}});
+  });
+})();
+</script>
 </div>
 
 
@@ -2410,6 +2423,7 @@ document.addEventListener('keydown', function(e){
    presented by the Fankle card's DRAW FORFEIT instruction when applicable. */
 #fankle-mobile-app .fm-forfeit-button{display:none !important;}
 </style>
+<style id="fankle-v55-7-remote">#fankle-mobile-app.role-remote .fm-card-wrap,#fankle-mobile-app.role-remote .fm-forfeit-wrap,#fankle-mobile-app.role-remote .fm-cta{display:none!important}#fankle-tv-remote-code{position:fixed;right:18px;bottom:18px;z-index:2147483647;background:rgba(10,8,14,.9);border:1px solid rgba(245,199,107,.7);border-radius:14px;padding:10px 16px;color:#fff;font:900 14px Arial;letter-spacing:.08em;display:none}#fankle-tv-remote-code strong{font-size:22px;color:#ffd36b;margin-left:8px}</style><div id="fankle-tv-remote-code" aria-hidden="true">PHONE DICE REMOTE <strong id="fankle-tv-remote-code-value"></strong></div>
 <div id="fankle-mobile-app" aria-hidden="true">
   <div class="fm-stage">
     <button class="fm-menu" id="fmMenu" type="button">MENU</button>
@@ -2466,7 +2480,7 @@ document.addEventListener('keydown', function(e){
   document.getElementById('fmForfeitFront').src=ASSETS.forfeitFront;
 
   const $=id=>document.getElementById(id);
-  const state={phase:'dice',die1:1,die2:1,total:2,card:null,forfeit:null,cta:false,mode:'solo',role:'dice',code:null,peer:null,connections:new Map(),host:false,meshIds:[],roles:{}};
+  const state={phase:'dice',die1:1,die2:1,total:2,card:null,forfeit:null,cta:false,mode:'solo',role:'dice',code:null,peer:null,remoteConn:null,connections:new Map(),host:false,meshIds:[],roles:{}};
   let ctaTimer=null, rolling=false, dicePauseTimer=null, peerReady=false;
   const DICE_LAND_PAUSE=1800;
   const toast=(s)=>{ $('fmToast').textContent=s; $('fmToast').classList.add('show'); setTimeout(()=>$('fmToast').classList.remove('show'),2200); };
@@ -2566,6 +2580,8 @@ document.addEventListener('keydown', function(e){
   function localForfeit(){if(state.phase!=='card')return;if(window.FankleCore){window.FankleCore.drawForfeit();setTimeout(()=>{const s=window.FankleCore.snapshot();state.forfeit=s.forfeitText;state.phase='forfeit';state.card=state.card;render();broadcastState();},50);}else{state.forfeit='Forfeit!';state.phase='forfeit';render();broadcastState();}}
   function ctaAction(k){if(state.mode==='network'){sendCommand(k);return;} if(k==='forfeit'){localForfeit();} else {state.card=null;state.forfeit=null;state.phase='dice';render();}}
 
+  function startRemote(code){code=(code||'').trim().toUpperCase();if(code.length!==4){toast('Enter the 4-letter TV code');return;}if(typeof Peer==='undefined'){toast('Remote library did not load');return;}state.mode='remote';state.role='remote';state.code=code;app.classList.add('role-remote');state.peer=new Peer();state.peer.on('open',()=>{const c=state.peer.connect('fktv-'+code,{reliable:true});state.remoteConn=c;c.on('open',()=>{hideNetwork();toast('Connected to TV');});c.on('data',m=>{if(m&&m.t==='dice'){state.die1=m.die1;state.die2=m.die2;state.total=m.total;renderDice();}});c.on('close',()=>toast('TV remote disconnected'));});state.peer.on('error',()=>toast('Could not connect to that TV'));}
+  function showRemote(){showNetwork('<h2>DICE REMOTE</h2><p>Enter the 4-letter code shown on the TV.</p><input class="fm-network-input" id="fmTvCode" maxlength="4" autocomplete="off" placeholder="ABCD"><div class="fm-network-actions"><button id="fmRemoteGo">CONNECT</button><button class="secondary" id="fmNetClose">CANCEL</button></div>');$('fmRemoteGo').onclick=()=>startRemote($('fmTvCode').value);$('fmNetClose').onclick=hideNetwork;}
   function showNetwork(html){$('fmNetworkCard').innerHTML=html;$('fmNetworkPanel').classList.add('open');}
   function hideNetwork(){ $('fmNetworkPanel').classList.remove('open'); }
   function roleButtons(prefix='') {return `<div class="fm-role-grid"><button data-role="dice">DICE</button><button data-role="fankle">FANKLE</button><button data-role="forfeit">FORFEIT</button></div>`}
@@ -2669,28 +2685,69 @@ document.addEventListener('keydown', function(e){
   }
 
 
-  $('fmMenu').onclick=()=>showNetwork(`<h2>FANKLE NETWORK</h2><p>One phone is the normal game. Or connect three phones so Dice, Fankle and Forfeit each have their own display.</p><div class="fm-network-actions"><button id="fmCreate">CREATE 3-PHONE GAME</button><button id="fmJoin">JOIN EXISTING GAME</button><button id="fmSolo" class="secondary">PLAY ONE PHONE</button><button id="fmTv" class="secondary">TV / DESKTOP VIEW</button></div>`);
-  document.addEventListener('click',e=>{if(e.target.id==='fmCreate')createGame();if(e.target.id==='fmJoin')joinGame();if(e.target.id==='fmSolo'){state.mode='solo';state.role='dice';hideNetwork();setPhase('dice');render()}if(e.target.id==='fmTv'){location.href=location.pathname+'?tv=1';}});
+  $('fmMenu').onclick=()=>showNetwork(`<h2>FANKLE NETWORK</h2><p>One phone is the normal game. Or connect three phones so Dice, Fankle and Forfeit each have their own display.</p><div class="fm-network-actions"><button id="fmCreate">CREATE 3-PHONE GAME</button><button id="fmJoin">JOIN EXISTING GAME</button><button id="fmRemote" class="secondary">DICE REMOTE FOR TV</button><button id="fmSolo" class="secondary">PLAY ONE PHONE</button><button id="fmTv" class="secondary">TV / DESKTOP VIEW</button></div>`);
+  document.addEventListener('click',e=>{if(e.target.id==='fmCreate')createGame();if(e.target.id==='fmJoin')joinGame();if(e.target.id==='fmRemote')showRemote();if(e.target.id==='fmSolo'){state.mode='solo';state.role='dice';hideNetwork();setPhase('dice');render()}if(e.target.id==='fmTv'){location.href=location.pathname+'?tv=1';}});
 
   function applyState(s){Object.assign(state,s);app.classList.remove('network-wait');render();}
   window.addEventListener('resize',()=>{});
   window.addEventListener('keydown',e=>{if(e.key.toLowerCase()==='f'&&state.mode==='solo')toast('FANKLE test armed — roll!')});
-  app.addEventListener('click',e=>{if(state.mode==='network'&&state.role==='dice'&&e.target.closest('.fm-die'))sendCommand('roll')});
-  app.addEventListener('touchend',e=>{if(state.mode==='solo'&&state.phase==='dice'&&!rolling){localRoll();}}, {passive:true});
+  app.addEventListener('click',e=>{if(state.mode==='network'&&state.role==='dice'&&e.target.closest('.fm-die'))sendCommand('roll');if(state.mode==='remote'&&e.target.closest('.fm-die')){if(state.remoteConn)send(state.remoteConn,{t:'roll'});}});
+  app.addEventListener('touchend',e=>{if(state.mode==='solo'&&state.phase==='dice'&&!rolling){localRoll();}else if(state.mode==='remote'&&state.remoteConn){send(state.remoteConn,{t:'roll'});}}, {passive:true});
   let lastShake=0;
   function enableShake(){
     if(!('DeviceMotionEvent' in window)) return;
     window.addEventListener('devicemotion',e=>{
-      if(state.mode!=='solo'||state.phase!=='dice'||rolling)return;
+      if((state.mode!=='solo'&&state.mode!=='remote')||state.phase!=='dice'||rolling)return;
       const a=e.accelerationIncludingGravity;if(!a)return;
       const mag=Math.sqrt((a.x||0)**2+(a.y||0)**2+(a.z||0)**2);
-      const now=Date.now();if(mag>19&&now-lastShake>1100){lastShake=now;localRoll();}
+      const now=Date.now();if(mag>19&&now-lastShake>1100){lastShake=now;if(state.mode==='remote'){if(state.remoteConn)send(state.remoteConn,{t:'roll'});}else localRoll();}
     },{passive:true});
   }
   enableShake();
   render();
 })();
 </script>
+
+<style id="fankle-v56-orientation-fix">
+/* V55.6 — mobile card content orientation and Forfeit deck orientation.
+   The Fankle artwork remains CW; its number/text are counter-rotated so
+   they read normally inside the face. */
+#fankle-mobile-app .fm-card-content{
+  width:1122px !important;
+  height:675px !important;
+  left:50% !important;
+  top:50% !important;
+  padding:0 !important;
+  transform:translate(-50%,-50%) rotate(-90deg) !important;
+  transform-origin:center center !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+}
+#fankle-mobile-app .fm-card-number{
+  width:280px !important;
+  max-width:280px !important;
+  height:auto !important;
+  flex:0 0 auto !important;
+  margin:0 0 20px !important;
+}
+#fankle-mobile-app .fm-card-type,
+#fankle-mobile-app .fm-card-action{
+  width:80% !important;
+  max-width:80% !important;
+  box-sizing:border-box !important;
+}
+#fankle-mobile-app .fm-card-action{
+  line-height:1.08 !important;
+}
+/* Forfeit deck: explicitly counter-clockwise 90 degrees. */
+#fankle-mobile-app .fm-forfeit-back,
+#fankle-mobile-app .fm-forfeit-front{
+  transform:rotate(-90deg) !important;
+}
+</style>
 </body>
 </html>
 
