@@ -2805,3 +2805,105 @@ document.addEventListener('keydown', function(e){
   transform:rotate(90deg) !important;
 }
 </style>
+
+
+<style id="fankle-v56-single-screen-portrait">
+/* V56 — SINGLE-SCREEN MOBILE PRESENTATION ONLY.
+   Physical phone remains portrait. The card artwork is rotated for the
+   landscape-shaped face, while its readable contents are counter-rotated
+   so NUMBER + WORDS read normally without rotating the phone.
+   Network roles and TV/desktop presentation are deliberately untouched. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-wrap,
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-wrap{
+  /* Portrait geometry of the source artwork. The containing element is then
+     rotated 90deg, producing the intended landscape card on the portrait phone. */
+  height:min(30vh,420px) !important;
+  width:auto !important;
+  aspect-ratio:910 / 1403 !important;
+  flex:0 0 auto !important;
+  overflow:visible !important;
+}
+
+/* FANKLE: rotate the complete card face into its landscape presentation. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card{
+  width:100% !important;
+  height:100% !important;
+  transform:rotate(90deg) !important;
+  transform-origin:center center !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card img.fm-card-art{
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:fill !important;
+  transform:none !important;
+}
+
+/* The content is inside the rotated card, so counter-rotate it. This makes
+   the number and words upright from the player's portrait viewpoint. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-content{
+  left:50% !important;
+  top:50% !important;
+  width:80% !important;
+  height:85.5% !important;
+  padding:0 !important;
+  transform:translate(-50%,-50%) rotate(-90deg) !important;
+  transform-origin:center center !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  box-sizing:border-box !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-number{
+  display:block !important;
+  width:42% !important;
+  max-width:none !important;
+  height:auto !important;
+  object-fit:contain !important;
+  margin:0 0 7% !important;
+  flex:0 0 auto !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-type,
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-action{
+  width:80% !important;
+  max-width:80% !important;
+  box-sizing:border-box !important;
+  text-align:center !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-type{
+  margin:0 0 3% !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-action{
+  line-height:1.08 !important;
+}
+
+/* FORFEIT: same physical rule. Rotate the portrait deck into its landscape
+   presentation, then counter-rotate the readable text. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-wrap{
+  transform:rotate(90deg) !important;
+  transform-origin:center center !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-back,
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-front{
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:fill !important;
+  transform:none !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-text{
+  width:68% !important;
+  height:68% !important;
+  transform:rotate(-90deg) !important;
+  transform-origin:center center !important;
+  font-size:clamp(15px,3.2vw,25px) !important;
+  line-height:1.1 !important;
+  padding:10px !important;
+  text-align:center !important;
+  box-sizing:border-box !important;
+}
+</style>
