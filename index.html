@@ -2497,7 +2497,7 @@ document.addEventListener('keydown', function(e){
   function showMobileWin(){ $('fmWinOverlay').classList.add('show'); $('fmWinOverlay').setAttribute('aria-hidden','false'); setTimeout(()=>{$('fmWinOverlay').classList.remove('show');$('fmWinOverlay').setAttribute('aria-hidden','true');},5200); }
   function cardCanForfeit(){return [2,4,6,10].includes(Number(state.total));}
   function makeCta(label,kind,img){const b=document.createElement('button');b.type='button';b.dataset.action=kind;const im=document.createElement('img');im.src=img;b.appendChild(im);const sp=document.createElement('span');sp.textContent=label;b.appendChild(sp);b.addEventListener('click',()=>ctaAction(kind));return b;}
-  function startCta(){clearCTA(); ctaTimer=setTimeout(()=>{state.cta=true;app.classList.add('cta-ready');const box=$('fmCta');box.innerHTML=''; if(cardCanForfeit()) box.appendChild(makeCta('DRAW FORFEIT','forfeit',ASSETS.buttonPurple)); box.appendChild(makeCta('ROLL AGAIN','roll',ASSETS.buttonOrange));},4000);}
+  function startCta(){clearCTA(); ctaTimer=setTimeout(()=>{state.cta=true;app.classList.add('cta-ready');const box=$('fmCta');box.innerHTML=''; if(cardCanForfeit()) box.appendChild(makeCta('DRAW FORFEIT','forfeit',ASSETS.buttonPurple)); box.appendChild(makeCta('ROLL AGAIN','roll',ASSETS.buttonOrange));},2000);}
   function renderCard(){
     $('fmCard').classList.toggle('revealed',!!state.card);
     if(state.card){$('fmCardNumber').src=ASSETS.numbers[state.total]||'';
@@ -3416,3 +3416,24 @@ document.addEventListener('keydown', function(e){
   if(f.complete && f.naturalWidth===0 && f.src!==fallback) f.src=fallback;
 })();
 </script>
+
+<style id="fankle-v61-temporary-text-fit">
+/* V61 — temporary text fit while testing the enlarged rigid card geometry.
+   Card geometry/rotation is intentionally untouched. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-type{
+  font-size:clamp(14px,2.6vw,24px) !important;
+  line-height:1.05 !important;
+  letter-spacing:.08em !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-action{
+  font-size:clamp(16px,3.1vw,30px) !important;
+  line-height:1.05 !important;
+  width:86% !important;
+  max-width:86% !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-text{
+  font-size:clamp(14px,2.9vw,23px) !important;
+  line-height:1.06 !important;
+  padding:8px !important;
+}
+</style>
