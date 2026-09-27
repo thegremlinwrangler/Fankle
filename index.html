@@ -2497,7 +2497,7 @@ document.addEventListener('keydown', function(e){
   function showMobileWin(){ $('fmWinOverlay').classList.add('show'); $('fmWinOverlay').setAttribute('aria-hidden','false'); setTimeout(()=>{$('fmWinOverlay').classList.remove('show');$('fmWinOverlay').setAttribute('aria-hidden','true');},5200); }
   function cardCanForfeit(){return [2,4,6,10].includes(Number(state.total));}
   function makeCta(label,kind,img){const b=document.createElement('button');b.type='button';b.dataset.action=kind;const im=document.createElement('img');im.src=img;b.appendChild(im);const sp=document.createElement('span');sp.textContent=label;b.appendChild(sp);b.addEventListener('click',()=>ctaAction(kind));return b;}
-  function startCta(){clearCTA(); ctaTimer=setTimeout(()=>{state.cta=true;app.classList.add('cta-ready');const box=$('fmCta');box.innerHTML=''; if(cardCanForfeit()) box.appendChild(makeCta('DRAW FORFEIT','forfeit',ASSETS.buttonPurple)); box.appendChild(makeCta('ROLL AGAIN','roll',ASSETS.buttonOrange));},10000);}
+  function startCta(){clearCTA(); ctaTimer=setTimeout(()=>{state.cta=true;app.classList.add('cta-ready');const box=$('fmCta');box.innerHTML=''; if(cardCanForfeit()) box.appendChild(makeCta('DRAW FORFEIT','forfeit',ASSETS.buttonPurple)); box.appendChild(makeCta('ROLL AGAIN','roll',ASSETS.buttonOrange));},4000);}
   function renderCard(){
     $('fmCard').classList.toggle('revealed',!!state.card);
     if(state.card){$('fmCardNumber').src=ASSETS.numbers[state.total]||'';
@@ -3187,5 +3187,98 @@ document.addEventListener('keydown', function(e){
 }
 #fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-wrap.drawn .fm-forfeit-text{
   display:flex !important;
+}
+</style>
+
+
+<style id="fankle-v59-final-mobile-layout">
+/* V59: mobile composition. Protect card geometry first; reclaim dice-area
+   space before reducing the deliberately oversized dice. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-stage{
+  padding:8px 12px 12px !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  gap:0 !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-instruction{
+  margin:0 0 2px !important;
+  flex:0 0 auto !important;
+}
+/* Keep the dice visually big; only the allocated area is tightened first. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-dice{
+  height:112px !important;
+  flex:0 0 112px !important;
+  gap:18px !important;
+  margin:0 0 4px !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-die{
+  width:128px !important;
+  height:128px !important;
+  flex:0 0 128px !important;
+}
+/* The two cards get independent rigid boxes and a real gap. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-wrap{
+  width:min(88vw,460px) !important;
+  height:auto !important;
+  aspect-ratio:1403 / 910 !important;
+  flex:0 0 auto !important;
+  margin:0 !important;
+  position:relative !important;
+  overflow:visible !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-wrap{
+  width:min(88vw,460px) !important;
+  height:auto !important;
+  aspect-ratio:1403 / 910 !important;
+  flex:0 0 auto !important;
+  margin:18px 0 0 !important;
+  position:relative !important;
+  overflow:visible !important;
+}
+/* Fankle front must read normally: clockwise from the supplied portrait art. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card img.fm-card-art{
+  height:100% !important;
+  width:auto !important;
+  max-height:none !important;
+  max-width:none !important;
+  object-fit:contain !important;
+  transform:rotate(90deg) !important;
+  transform-origin:center center !important;
+}
+/* Forfeit front was already visually correct in V58; keep that rotation and
+   apply exactly the same rotation to the back. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-back,
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-front{
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  height:100% !important;
+  width:auto !important;
+  max-height:none !important;
+  max-width:none !important;
+  object-fit:contain !important;
+  transform:translate(-50%,-50%) rotate(-90deg) !important;
+  transform-origin:center center !important;
+}
+/* Make the plain/paisley Fankle front a background as well as an image layer.
+   The background gives us a clean visual fallback if the img element reports
+   an error, so the broken-image glyph/alt text can never become part of the UI. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-front{
+  background-image:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi-_DwixDM4D64OIwsntzpXn92RtjhbQGHIvidJuPmuCWfGNC4B368nRNff219gt9O0QX91naKZ66zhjL9VYVG9jE1YIr0yKn_xUtL3ZXZE6EwHpRXDZ6zUpZuQ1CrtwqryNgPwitxaa8HRD1ojEz-6R765kQsTD0arZ23AfzeCZXwA/s1600/Blank%20fankle%20face.png") !important;
+  background-position:center !important;
+  background-repeat:no-repeat !important;
+  background-size:contain !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) #fmCardFront{
+  color:transparent !important;
+  font-size:0 !important;
+}
+/* The 4-second CTA is kept below both cards, never over either one. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-cta{
+  position:relative !important;
+  flex:0 0 auto !important;
+  margin-top:18px !important;
+  margin-bottom:4px !important;
+  z-index:10 !important;
 }
 </style>
