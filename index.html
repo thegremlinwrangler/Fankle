@@ -1842,6 +1842,77 @@ html, body{
   text-shadow:0 2px 10px rgba(0,0,0,.8);
 }
 </style>
+
+<style id="fankle-v55-2-pip-renderer">
+/* V55.2 — SINGLE PIP RENDERER
+   The supplied pip image is the pip. No pseudo-element, gradient, shadow,
+   or generated dot is allowed to render underneath it. */
+#fankle-game-root .dice-row .pips .fankle-pip,
+#fankle-game-root .dice-row .pips .fankle-pip::before,
+#fankle-game-root .dice-row .pips .fankle-pip::after{
+  box-sizing:border-box !important;
+}
+#fankle-game-root .dice-row .pips .fankle-pip{
+  position:static !important;
+  width:100% !important;
+  height:100% !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  max-width:none !important;
+  max-height:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:block !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background-color:transparent !important;
+  background-repeat:no-repeat !important;
+  background-position:center !important;
+  background-size:82% 82% !important;
+  box-shadow:none !important;
+  opacity:0 !important;
+  filter:none !important;
+  mix-blend-mode:normal !important;
+}
+#fankle-game-root .dice-row .die.orange .pips .fankle-pip{
+  background-image:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj7YwQe7PYwQSeV2UM4tXrsdh8HEJ6ofRtcE4rcA-EYRaeyTeH8SjfS2XidwjlccFaBku1eefX4vd0QeIwt55bnsSs940ovl78jBiERGHWR_iLwvphtd-S5uET7yAtGUzOQdMyt3v3PNOnYgPvyKgxp1sST3_Nk5YmaM3aHakJe_u5VCQ/s1600/orangepip.png") !important;
+}
+#fankle-game-root .dice-row .die.purple .pips .fankle-pip{
+  background-image:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVzBKDw-T8VGUvQE6y1ZG3wVC2pmCcapYrdEqxWDORyx91yzXVNzLPhP4bsQF8dDSNA6Cgz1WQ5-WBdvbi11mGa2f4ZvrmCqLxcpr4TLMBCbmvE-Ua3FEnvaeZRUAqbAY_t4KG86J9HL8ZqAQIojkSZARfK2NoXAqhq1WVr7YhuV59fQ/s1600/purplepip.png") !important;
+}
+#fankle-game-root .dice-row .pips .fankle-pip::before,
+#fankle-game-root .dice-row .pips .fankle-pip::after{
+  content:none !important;
+  display:none !important;
+  background:none !important;
+  box-shadow:none !important;
+}
+/* Only the mathematical pip positions for the current value are visible. */
+#fankle-game-root .dice-row .d1 .fankle-pip:nth-child(5),
+#fankle-game-root .dice-row .d2 .fankle-pip:nth-child(1),
+#fankle-game-root .dice-row .d2 .fankle-pip:nth-child(9),
+#fankle-game-root .dice-row .d3 .fankle-pip:nth-child(1),
+#fankle-game-root .dice-row .d3 .fankle-pip:nth-child(5),
+#fankle-game-root .dice-row .d3 .fankle-pip:nth-child(9),
+#fankle-game-root .dice-row .d4 .fankle-pip:nth-child(1),
+#fankle-game-root .dice-row .d4 .fankle-pip:nth-child(3),
+#fankle-game-root .dice-row .d4 .fankle-pip:nth-child(7),
+#fankle-game-root .dice-row .d4 .fankle-pip:nth-child(9),
+#fankle-game-root .dice-row .d5 .fankle-pip:nth-child(1),
+#fankle-game-root .dice-row .d5 .fankle-pip:nth-child(3),
+#fankle-game-root .dice-row .d5 .fankle-pip:nth-child(5),
+#fankle-game-root .dice-row .d5 .fankle-pip:nth-child(7),
+#fankle-game-root .dice-row .d5 .fankle-pip:nth-child(9),
+#fankle-game-root .dice-row .d6 .fankle-pip:nth-child(1),
+#fankle-game-root .dice-row .d6 .fankle-pip:nth-child(3),
+#fankle-game-root .dice-row .d6 .fankle-pip:nth-child(4),
+#fankle-game-root .dice-row .d6 .fankle-pip:nth-child(6),
+#fankle-game-root .dice-row .d6 .fankle-pip:nth-child(7),
+#fankle-game-root .dice-row .d6 .fankle-pip:nth-child(9){
+  opacity:1 !important;
+}
+</style>
+
 </head>
 <body>
 <div id="fankle-game-root">
