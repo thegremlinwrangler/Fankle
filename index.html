@@ -2412,7 +2412,7 @@ document.addEventListener('keydown', function(e){
 </style>
 <div id="fankle-mobile-app" aria-hidden="true">
   <div class="fm-stage">
-    <button class="fm-menu" id="fmMenu" type="button">NETWORK</button>
+    <button class="fm-menu" id="fmMenu" type="button">MENU</button>
     <div class="fm-toast" id="fmToast"></div>
     <div class="fm-instruction" id="fmInstruction">tap/shake phone to wake the dice!</div>
     <div class="fm-dice" id="fmDice">
@@ -2698,14 +2698,13 @@ document.addEventListener('keydown', function(e){
 <style id="fankle-v55-3-card-fix">
 /* V55.3 — mobile cards: CW 90°, image numbers, 80% text width. */
 #fankle-mobile-app .fm-card-wrap{
-  width:min(94vw,560px) !important;
-  height:auto !important;
+  width:min(70vw,420px) !important;
+  height:min(31vh,420px) !important;
   aspect-ratio:1403 / 910 !important;
   overflow:visible !important;
-}
-#fankle-mobile-app .fm-card{
-  width:910px !important;
-  height:1403px !important;
+} #fankle-mobile-app .fm-card{
+  width:100% !important;
+  height:100% !important;
   flex:0 0 auto !important;
   transform:rotate(90deg) !important;
   transform-origin:center center !important;
