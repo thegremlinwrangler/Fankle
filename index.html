@@ -1913,6 +1913,23 @@ html, body{
 }
 </style>
 
+
+<style id="fankle-mobile-boot-hide">
+/* Prevent the desktop presentation from flashing before the mobile script takes over. */
+html.fankle-mobile-boot #fankle-game-root{display:none !important;}
+html.fankle-mobile-boot #fankle-mobile-app{display:block !important;}
+</style>
+<script id="fankle-mobile-boot-script">
+(function(){
+  try{
+    var q=new URLSearchParams(location.search);
+    var forcedDesktop=q.get('tv')==='1'||q.get('desktop')==='1';
+    var mobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) && matchMedia('(pointer:coarse)').matches;
+    var small=innerWidth<=680 && matchMedia('(pointer:coarse)').matches;
+    if(!forcedDesktop && (q.get('mobile')==='1'||mobile||small)) document.documentElement.classList.add('fankle-mobile-boot');
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 <div id="fankle-game-root">
@@ -2746,6 +2763,98 @@ document.addEventListener('keydown', function(e){
 #fankle-mobile-app .fm-forfeit-back,
 #fankle-mobile-app .fm-forfeit-front{
   transform:rotate(-90deg) !important;
+}
+</style>
+
+<style id="fankle-v62-final-mobile-geometry">
+/* V62 — final geometry pass.  The Fankle deck is a square card; the Forfeit
+   deck is the horizontal/oblong card.  Desktop remains visually unchanged. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-stage{
+  padding:34px 12px 20px !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  gap:0 !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-instruction{
+  margin:0 0 4px !important;
+  flex:0 0 auto !important;
+  position:relative !important;
+  z-index:10 !important;
+}
+/* Keep the dice big. The allocated dice area is deliberately shorter. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-dice{
+  height:104px !important;
+  flex:0 0 104px !important;
+  gap:16px !important;
+  margin:0 0 2px !important;
+  overflow:visible !important;
+  position:relative !important;
+  z-index:5 !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-die{
+  width:128px !important;height:128px !important;flex:0 0 128px !important;
+}
+/* Fankle is a square deck. Make the whole square larger; all of its content
+   scales with it. Rotation is deliberately left exactly as the working V61. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-wrap{
+  width:min(92vw,500px) !important;
+  height:auto !important;
+  aspect-ratio:1 / 1 !important;
+  flex:0 0 auto !important;
+  margin:0 auto !important;
+  position:relative !important;
+  overflow:hidden !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card,
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-back,
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-front{
+  width:100% !important;height:100% !important;
+}
+/* Leave the working Fankle rotation alone. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card img.fm-card-art{
+  transform:rotate(90deg) !important;
+}
+/* Scale the readable content and number with the enlarged square card. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-content{
+  width:72% !important;height:72% !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-number{
+  width:25% !important;
+}
+/* Forfeit remains the exact size of the confirmed-good front. Its back is
+   already a horizontal image, so it must NOT be rotated. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-remote) .fm-forfeit-wrap{
+  width:min(92vw,500px) !important;
+  height:auto !important;
+  aspect-ratio:1403 / 910 !important;
+  flex:0 0 auto !important;
+  margin:12px auto 0 !important;
+  position:relative !important;
+  overflow:hidden !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-front{
+  transform:translate(-50%,-50%) rotate(-90deg) !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-remote) .fm-forfeit-back{
+  width:100% !important;height:100% !important;
+  max-width:none !important;max-height:none !important;
+  object-fit:contain !important;
+  transform:translate(-50%,-50%) !important;
+}
+/* Same visual card box for both Forfeit faces. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-front{
+  width:65% !important;height:154.2% !important;
+  max-width:none !important;max-height:none !important;
+  object-fit:contain !important;
+}
+/* Keep the proven text treatment locked. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-text{
+  width:76% !important;height:76% !important;
+}
+/* CTA stays in flow and appears after the confirmed 2-second timer. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-cta{
+  position:relative !important;left:auto !important;right:auto !important;bottom:auto !important;
+  flex:0 0 auto !important;margin:16px 0 10px !important;
 }
 </style>
 </body>
