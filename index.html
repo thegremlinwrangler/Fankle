@@ -3682,3 +3682,30 @@ document.addEventListener('keydown', function(e){
   transform-origin:center center !important;
 }
 </style>
+
+<style id="fankle-v65-spacing-final">
+/* V65: lock the approved Forfeit geometry. Adjust only the vertical composition.
+   The top gap is reduced by moving the upper stack upward; the Fankle card is
+   held at its existing screen position, deliberately increasing the dice→Fankle gap. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-stage{
+  padding-top:58px !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-wrap{
+  margin-top:30px !important;
+}
+/* Bring Roll Again upward without moving either deck. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-cta{
+  margin-top:8px !important;
+  transform:translateY(-6px) !important;
+}
+</style>
+
+<style id="fankle-v65-spacing-final">
+/* V65: lock the approved Forfeit geometry. Adjust only the vertical composition.
+   The top gap is reduced by moving the upper stack upward; the Fankle card is
+   held at its existing screen position, deliberately increasing the dice-to-Fankle gap. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-stage{padding-top:58px !important;}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-wrap{margin-top:30px !important;}
+/* Bring Roll Again upward without moving either deck. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-cta{margin-top:8px !important;transform:translateY(-6px) !important;}
+</style>
