@@ -2530,7 +2530,7 @@ document.addEventListener('keydown', function(e){
     else {$('fmCardNumber').removeAttribute('src');$('fmCardNumber').alt='';$('fmCardType').textContent='';$('fmCardAction').textContent='';}
   }
   function renderForfeit(){const drawn=!!state.forfeit;$('fmForfeitWrap').classList.toggle('drawn',drawn);$('fmForfeitText').textContent=drawn?state.forfeit:'';}
-  function render(){renderDice();renderCard();renderForfeit();clearCTA();if(state.phase==='card' && state.card) startCta(); if(state.phase==='forfeit'){$('fmForfeitWrap').classList.add('drawn');} setPhase(state.phase);}
+  function render(){renderDice();renderCard();renderForfeit();clearCTA();if(state.phase==='card' && state.card) startCta(); if(state.phase==='forfeit'){ $('fmForfeitWrap').classList.add('drawn'); startCta(); } setPhase(state.phase);}
 
   // Use the same physical dice movement as the desktop game: roll, tumble, land.
   // The Web Animations API is deliberate here so mobile/theme CSS cannot change the motion.
