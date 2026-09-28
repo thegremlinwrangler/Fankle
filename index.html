@@ -2710,7 +2710,7 @@ document.addEventListener('keydown', function(e){
   }
 
 
-  $('fmMenu').onclick=()=>showNetwork(`<h2>FANKLE NETWORK</h2><p>One phone is the normal game. Or connect three phones so Dice, Fankle and Forfeit each have their own display.</p><div class="fm-network-actions"><button id="fmCreate">CREATE 3-PHONE GAME</button><button id="fmJoin">JOIN EXISTING GAME</button><button id="fmRemote" class="secondary">DICE REMOTE FOR TV</button><button id="fmSolo" class="secondary">PLAY ONE PHONE</button><button id="fmTv" class="secondary">TV / DESKTOP VIEW</button></div>`);
+  $('fmMenu').onclick=()=>showNetwork(`<h2>FANKLE NETWORK</h2><p>One phone is the normal game. Or connect three phones so Dice, Fankle and Forfeit each have their own display.</p><div class="fm-network-actions fm-main-menu-actions"><button id="fmCreate" class="fm-resin-menu fm-resin-brown">CREATE 3-PHONE GAME</button><button id="fmJoin" class="fm-resin-menu fm-resin-orange">JOIN EXISTING GAME</button><button id="fmRemote" class="fm-resin-menu fm-resin-pink">DICE REMOTE FOR TV</button><button id="fmSolo" class="fm-resin-menu fm-resin-purple">PLAY ONE PHONE</button><button id="fmTv" class="fm-resin-menu fm-resin-yellow">TV / DESKTOP VIEW</button></div>`);
   document.addEventListener('click',e=>{if(e.target.id==='fmCreate')createGame();if(e.target.id==='fmJoin')joinGame();if(e.target.id==='fmRemote')showRemote();if(e.target.id==='fmSolo'){state.mode='solo';state.role='dice';hideNetwork();setPhase('dice');render()}if(e.target.id==='fmTv'){location.href=location.pathname+'?tv=1';}});
 
   function applyState(s){Object.assign(state,s);app.classList.remove('network-wait');render();}
@@ -3716,4 +3716,21 @@ document.addEventListener('keydown', function(e){
 #fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-wrap{margin-top:30px !important;}
 /* Bring Roll Again upward without moving either deck. */
 #fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-cta{margin-top:8px !important;transform:translateY(-18px) !important;}
+</style>
+
+<style id="fankle-v70-resin-menu">
+/* V70 — use the supplied resin lozenges for the five main menu choices. */
+#fankle-mobile-app .fm-main-menu-actions{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+#fankle-mobile-app .fm-main-menu-actions .fm-resin-menu{
+  position:relative;min-height:58px;width:100%;padding:12px 22px;border:0;background-color:transparent !important;
+  background-repeat:no-repeat !important;background-position:center !important;background-size:100% 100% !important;
+  color:#fff !important;text-shadow:0 2px 3px rgba(0,0,0,.75);font:900 14px Arial,sans-serif;
+  letter-spacing:.035em;cursor:pointer;filter:none !important;
+}
+#fankle-mobile-app .fm-main-menu-actions .fm-resin-menu:active{transform:scale(.985);}
+#fankle-mobile-app .fm-main-menu-actions .fm-resin-brown{background-image:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjQG61d1ScGZVf7Yv_eGhxNE6rQboCYliRUVnGXLTz7yjfzYesul3wTg3sfZyBXFEBgEH8OUFQI5td94KPVQ4PqKwT9rDLeYr2v7CfXqAc-MzTWFsq1bP38zJOkuQLJuL-L1LxKXcFm6sP062aoyiXfxNea8c2m1oC2qYT3DyISKjWF0cyN5jdOzgMxieY/s1600/brown.png") !important;}
+#fankle-mobile-app .fm-main-menu-actions .fm-resin-orange{background-image:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjQXqFKl8fPdjHvxDpr2_H2l6AigS5jKKxPMphcCFIdDltvQcFaX89LlbjwZS_Brr3HAYCt1XBVw1og9YKCtXdgUwh75zEYXJOIEiKFf82u-Hmn_Ez5oC9SAmFRyCCqz3XbNlYD_t-4LB-uEp8miAFglgLJNvNsIDlT1_d8r5wSGEu9EpaHAzO_Pteufms/s1600/orange.png") !important;}
+#fankle-mobile-app .fm-main-menu-actions .fm-resin-pink{background-image:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioPWvy1brq94tt1OQ5MZFsilhRm2F293qTjo7ON7ZN85Q1zoJAktn4NYT_WZ1gnedn-_LsbhnLtbvFYYVQIRN5nxzTcD9SlZsR4QTee0H62OhREyCDK4tJkspadfpehsXbQaNWDXYeSR-R6UHC9_Azu1p7lj8EIYCQDHjREtpMkOWmgpmh1g75OHsIpLs/s1600/pink.png") !important;}
+#fankle-mobile-app .fm-main-menu-actions .fm-resin-purple{background-image:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiQVxBuojexbSHcjg67CtD3A1o7Yw2BtBJyotDgSAa0brupNSSPKglwHDsOLd2YT3jUaMCxNvTNDwtatUwDkIvlGmTvts2Z4boHVd4tGdQwAplV_d79b_AATlboYLxhz7n5C8EGdmIHBuH78ZbIa1YBCosfZ0O2hw-kfkZnWOMxar1e_DKnioIeZQ_gHLo/s1600/purple.png") !important;}
+#fankle-mobile-app .fm-main-menu-actions .fm-resin-yellow{background-image:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjnGVhMBZXhQFGIN-apDpE2HFWw5JxYtXZw1RGRD84P_4YFNOs-5oEc7JJeQ38jaa4IC3Si_cYfxZ4QWiI-98TiLCk9WTELnl_RkBp-SZ5Ru6FO5ha4N6pcRSbx49137GOYQgEcNz0Dl3WtOeen8b_C8RVa2ipvULDfWU7ZBthn-vfON2NuOrmPKo-czx4/s1600/yellow.png") !important;}
 </style>
