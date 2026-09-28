@@ -4049,3 +4049,116 @@ html.fankle-browser-landscape #fankle-game-root .dice-zone .roll{
   padding:9px 22px !important;
 }
 </style>
+
+<style id="fankle-v76-forfeit-landscape-final">
+/* V76 — browser Desktop Site + landscape: lock the Forfeit deck to the
+   established portrait desktop geometry.  The supplied back artwork is
+   horizontal, so it is rotated into the portrait card box. */
+@media (orientation: landscape) and (max-width:1100px) and (pointer:coarse){
+  html.fankle-browser-landscape #fankle-game-root .forfeit-card{
+    position:relative !important;
+    width:160px !important;
+    height:240px !important;
+    min-width:160px !important;
+    min-height:240px !important;
+    max-width:none !important;
+    max-height:none !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:visible !important;
+    display:block !important;
+    aspect-ratio:auto !important;
+  }
+
+  /* Un-drawn deck: horizontal source rotated into a rigid portrait card. */
+  html.fankle-browser-landscape #fankle-game-root .forfeit-card .forfeit-deck-back{
+    position:absolute !important;
+    left:50% !important;
+    top:50% !important;
+    width:240px !important;
+    height:156px !important;
+    max-width:none !important;
+    max-height:none !important;
+    object-fit:fill !important;
+    transform:translate(-50%,-50%) rotate(90deg) !important;
+    transform-origin:center center !important;
+    display:block !important;
+  }
+
+  /* Drawn card: only the front face is visible, and it is portrait. */
+  html.fankle-browser-landscape #fankle-game-root .forfeit-card .forfeit-face{
+    position:absolute !important;
+    left:50% !important;
+    top:50% !important;
+    width:160px !important;
+    height:240px !important;
+    max-width:none !important;
+    max-height:none !important;
+    object-fit:fill !important;
+    transform:translate(-50%,-50%) !important;
+    transform-origin:center center !important;
+    display:none !important;
+    z-index:1 !important;
+  }
+  html.fankle-browser-landscape #fankle-game-root .forfeit-card.drawn .forfeit-deck-back{
+    display:none !important;
+  }
+  html.fankle-browser-landscape #fankle-game-root .forfeit-card.drawn .forfeit-face{
+    display:block !important;
+  }
+
+  /* Keep the text comfortably inside the portrait front. */
+  html.fankle-browser-landscape #fankle-game-root .forfeit-card .forfeit-text,
+  html.fankle-browser-landscape #fankle-game-root .forfeit-card.drawn .forfeit-text{
+    position:absolute !important;
+    left:50% !important;
+    top:50% !important;
+    width:118px !important;
+    height:174px !important;
+    margin:0 !important;
+    padding:8px !important;
+    box-sizing:border-box !important;
+    display:none !important;
+    place-items:center !important;
+    text-align:center !important;
+    font-size:18px !important;
+    line-height:1.12 !important;
+    font-weight:800 !important;
+    transform:translate(-50%,-50%) !important;
+    z-index:2 !important;
+    overflow:hidden !important;
+  }
+  html.fankle-browser-landscape #fankle-game-root .forfeit-card.drawn .forfeit-text{
+    display:grid !important;
+  }
+
+  /* The resin Forfeit Deck control belongs underneath the card, not over it. */
+  html.fankle-browser-landscape #fankle-game-root .forfeit-card .forfeit-label{
+    position:absolute !important;
+    left:50% !important;
+    top:252px !important;
+    bottom:auto !important;
+    width:135px !important;
+    height:auto !important;
+    aspect-ratio:2137 / 736 !important;
+    min-width:0 !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    transform:translateX(-50%) !important;
+    overflow:hidden !important;
+    z-index:5 !important;
+  }
+  html.fankle-browser-landscape #fankle-game-root .forfeit-card .forfeit-label img{
+    position:absolute !important;
+    inset:0 !important;
+    width:100% !important;
+    height:100% !important;
+    object-fit:contain !important;
+  }
+  html.fankle-browser-landscape #fankle-game-root .forfeit-card .forfeit-label span{
+    font-size:9px !important;
+    letter-spacing:.13em !important;
+  }
+}
+</style>
