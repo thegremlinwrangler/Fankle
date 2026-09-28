@@ -2883,6 +2883,128 @@ document.addEventListener('keydown', function(e){
   flex:0 0 auto !important;margin:16px 0 10px !important;
 }
 </style>
+
+<style id="fankle-v75-browser-landscape-tuning">
+/* V75 — browser Desktop Site + landscape only.
+   Match the established laptop desktop composition: portrait Forfeit deck,
+   square Fankle card, dice high-but-contained, hint and ROLL EM low in the
+   Dice Devil panel. This is presentation-only; no game logic is changed. */
+@media (orientation: landscape) and (max-width: 1100px) and (pointer: coarse){
+  html.fankle-browser-landscape #fankle-game-root .table{
+    width:calc(100vw - 20px) !important;
+    height:calc(100dvh - 20px) !important;
+    margin:10px !important;
+    padding:16px !important;
+    box-sizing:border-box !important;
+    grid-template-columns:minmax(155px,1fr) minmax(430px,2fr) minmax(250px,1fr) !important;
+    gap:12px !important;
+    overflow:hidden !important;
+  }
+
+  html.fankle-browser-landscape #fankle-game-root .forfeit-zone{
+    position:relative !important;
+    display:block !important;
+    padding:0 !important;
+  }
+  html.fankle-browser-landscape #fankle-game-root .forfeit-card{
+    position:absolute !important;
+    left:50% !important;
+    top:58% !important;
+    transform:translate(-50%,-50%) !important;
+    width:150px !important;
+    height:230px !important;
+    max-width:none !important;
+    max-height:none !important;
+    display:block !important;
+  }
+  /* The desktop deck asset is already meant to be shown portrait here. */
+  html.fankle-browser-landscape #fankle-game-root .forfeit-card .forfeit-deck-back{
+    display:block !important;
+    width:150px !important;
+    height:auto !important;
+    max-width:none !important;
+    max-height:none !important;
+    transform:translateY(0) rotate(90deg) !important;
+    transform-origin:center center !important;
+  }
+  html.fankle-browser-landscape #fankle-game-root .forfeit-label{
+    left:50% !important;
+    bottom:-55px !important;
+    min-width:120px !important;
+    padding:9px 16px !important;
+    font-size:10px !important;
+    letter-spacing:.13em !important;
+  }
+
+  html.fankle-browser-landscape #fankle-game-root .card-zone{
+    position:relative !important;
+    display:grid !important;
+    place-items:center !important;
+    padding:0 !important;
+  }
+  html.fankle-browser-landscape #fankle-game-root .card-wrap{
+    width:min(520px,94%,calc(100dvh - 105px)) !important;
+    height:auto !important;
+    aspect-ratio:1 !important;
+    margin:0 !important;
+  }
+
+  html.fankle-browser-landscape #fankle-game-root .dice-zone{
+    position:relative !important;
+    display:block !important;
+    padding:0 !important;
+    overflow:hidden !important;
+  }
+  html.fankle-browser-landscape #fankle-game-root .dice-zone .zone-label{
+    position:absolute !important;
+    top:16px !important;
+    left:18px !important;
+    right:18px !important;
+    z-index:3 !important;
+  }
+  html.fankle-browser-landscape #fankle-game-root .dice-row{
+    position:absolute !important;
+    top:58px !important;
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:12px !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+  html.fankle-browser-landscape #fankle-game-root .dice-row .die{
+    width:112px !important;
+    flex:0 0 112px !important;
+  }
+  html.fankle-browser-landscape #fankle-game-root .dice-zone .hint{
+    position:absolute !important;
+    left:50% !important;
+    bottom:70px !important;
+    transform:translateX(-50%) !important;
+    width:230px !important;
+    max-width:calc(100% - 24px) !important;
+    margin:0 !important;
+    padding:0 !important;
+    font-size:11px !important;
+    line-height:1.3 !important;
+    text-align:center !important;
+  }
+  html.fankle-browser-landscape #fankle-game-root .dice-zone .roll{
+    position:absolute !important;
+    left:50% !important;
+    bottom:18px !important;
+    transform:translateX(-50%) !important;
+    margin:0 !important;
+    padding:9px 24px !important;
+    min-width:145px !important;
+    font-size:12px !important;
+  }
+}
+</style>
+
 </body>
 </html>
 
