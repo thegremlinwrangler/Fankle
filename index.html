@@ -1932,6 +1932,7 @@ html.fankle-mobile-boot #fankle-mobile-app{display:block !important;}
   try{
     var q=new URLSearchParams(location.search);
     var forcedDesktop=q.get('tv')==='1'||q.get('desktop')==='1';
+    if(forcedDesktop) document.documentElement.classList.add('fankle-forced-desktop');
     var mobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) && matchMedia('(pointer:coarse)').matches;
     var small=innerWidth<=680 && matchMedia('(pointer:coarse)').matches;
     if(!forcedDesktop && (q.get('mobile')==='1'||mobile||small)) document.documentElement.classList.add('fankle-mobile-boot');
@@ -3733,4 +3734,55 @@ document.addEventListener('keydown', function(e){
 #fankle-mobile-app .fm-main-menu-actions .fm-resin-pink{background-image:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioPWvy1brq94tt1OQ5MZFsilhRm2F293qTjo7ON7ZN85Q1zoJAktn4NYT_WZ1gnedn-_LsbhnLtbvFYYVQIRN5nxzTcD9SlZsR4QTee0H62OhREyCDK4tJkspadfpehsXbQaNWDXYeSR-R6UHC9_Azu1p7lj8EIYCQDHjREtpMkOWmgpmh1g75OHsIpLs/s1600/pink.png") !important;}
 #fankle-mobile-app .fm-main-menu-actions .fm-resin-purple{background-image:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiQVxBuojexbSHcjg67CtD3A1o7Yw2BtBJyotDgSAa0brupNSSPKglwHDsOLd2YT3jUaMCxNvTNDwtatUwDkIvlGmTvts2Z4boHVd4tGdQwAplV_d79b_AATlboYLxhz7n5C8EGdmIHBuH78ZbIa1YBCosfZ0O2hw-kfkZnWOMxar1e_DKnioIeZQ_gHLo/s1600/purple.png") !important;}
 #fankle-mobile-app .fm-main-menu-actions .fm-resin-yellow{background-image:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjnGVhMBZXhQFGIN-apDpE2HFWw5JxYtXZw1RGRD84P_4YFNOs-5oEc7JJeQ38jaa4IC3Si_cYfxZ4QWiI-98TiLCk9WTELnl_RkBp-SZ5Ru6FO5ha4N6pcRSbx49137GOYQgEcNz0Dl3WtOeen8b_C8RVa2ipvULDfWU7ZBthn-vfON2NuOrmPKo-czx4/s1600/yellow.png") !important;}
+</style>
+
+<style id="fankle-v71-forced-desktop-view">
+/* V71 — TV/Desktop View really means the existing desktop table, even when
+   the command is launched from a phone in landscape.  Do not redesign it;
+   explicitly restore the established three-column desktop presentation. */
+html.fankle-forced-desktop #fankle-game-root{display:block !important;}
+html.fankle-forced-desktop #fankle-mobile-app{display:none !important;}
+html.fankle-forced-desktop #fankle-game-root .table{
+  width:min(1500px,90vw) !important;
+  height:90vh !important;
+  margin:5vh auto !important;
+  min-height:0 !important;
+  grid-template-columns:minmax(180px,1fr) minmax(460px,2fr) minmax(180px,1fr) !important;
+  grid-template-rows:1fr !important;
+  gap:14px !important;
+}
+html.fankle-forced-desktop #fankle-game-root .forfeit-zone{
+  grid-column:1 !important; grid-row:1 !important;
+  min-height:0 !important; padding:42px 22px 28px !important;
+}
+html.fankle-forced-desktop #fankle-game-root .card-zone{
+  grid-column:2 !important; grid-row:1 !important;
+  min-height:0 !important; padding:42px 18px 18px !important;
+}
+html.fankle-forced-desktop #fankle-game-root .dice-zone{
+  grid-column:3 !important; grid-row:1 !important;
+  min-height:0 !important; padding:42px 24px 28px !important;
+  display:flex !important; flex-direction:column !important;
+  align-items:center !important; justify-content:center !important;
+}
+html.fankle-forced-desktop #fankle-game-root .card-wrap{
+  width:min(700px,94%) !important; height:auto !important; aspect-ratio:1 !important;
+  max-height:calc(100% - 8px) !important;
+}
+html.fankle-forced-desktop #fankle-game-root .dice-row{
+  display:flex !important; flex-direction:row !important; gap:14px !important;
+  margin:18px 0 12px !important;
+}
+html.fankle-forced-desktop #fankle-game-root .die{
+  width:clamp(100px,10vw,145px) !important;
+}
+html.fankle-forced-desktop #fankle-game-root .hint{
+  display:block !important; max-width:250px !important; width:auto !important;
+  margin:6px 0 12px !important; padding:0 !important;
+  font-size:13px !important; line-height:1.4 !important; text-align:center !important;
+}
+html.fankle-forced-desktop #fankle-game-root .dice-zone .roll{
+  align-self:center !important; justify-self:auto !important;
+  margin:0 !important; padding:10px 22px !important; font-size:inherit !important;
+}
 </style>
