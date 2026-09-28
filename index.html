@@ -2602,7 +2602,7 @@ document.addEventListener('keydown', function(e){
     rolling=true;
     landDiceAndReveal(card||{type:'',text:''});
   }
-  function localForfeit(){if(state.phase!=='card')return;if(window.FankleCore){window.FankleCore.drawForfeit();setTimeout(()=>{const s=window.FankleCore.snapshot();state.forfeit=s.forfeitText;state.phase='forfeit';state.card=state.card;render();broadcastState();},50);}else{state.forfeit='Forfeit!';state.phase='forfeit';render();broadcastState();}}
+  function localForfeit(){if(state.phase!=='card' && state.phase!=='forfeit')return;if(window.FankleCore){window.FankleCore.drawForfeit();setTimeout(()=>{const s=window.FankleCore.snapshot();state.forfeit=s.forfeitText;state.phase='forfeit';state.card=state.card;render();broadcastState();},50);}else{state.forfeit='Forfeit!';state.phase='forfeit';render();broadcastState();}}
   function ctaAction(k){if(state.mode==='network'){sendCommand(k);return;} if(k==='forfeit'){localForfeit();} else {state.card=null;state.forfeit=null;state.phase='dice';render();}}
 
   function startRemote(code){code=(code||'').trim().toUpperCase();if(code.length!==4){toast('Enter the 4-letter TV code');return;}if(typeof Peer==='undefined'){toast('Remote library did not load');return;}state.mode='remote';state.role='remote';state.code=code;app.classList.add('role-remote');state.peer=new Peer();state.peer.on('open',()=>{const c=state.peer.connect('fktv-'+code,{reliable:true});state.remoteConn=c;c.on('open',()=>{hideNetwork();toast('Connected to TV');});c.on('data',m=>{if(m&&m.t==='dice'){state.die1=m.die1;state.die2=m.die2;state.total=m.total;renderDice();}});c.on('close',()=>toast('TV remote disconnected'));});state.peer.on('error',()=>toast('Could not connect to that TV'));}
