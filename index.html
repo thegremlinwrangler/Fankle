@@ -3634,3 +3634,51 @@ document.addEventListener('keydown', function(e){
   padding:8px !important;
 }
 </style>
+
+
+<style id="fankle-v64-final-cascade">
+/* V64 — final cascade.  The file has accumulated earlier experimental
+   rotation rules, so these are deliberately the last rules in the document. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-stage{
+  padding-top:88px !important;
+  padding-bottom:24px !important;
+}
+/* Give the instruction a little breathing room before the oversized dice. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-instruction{
+  margin-bottom:14px !important;
+  position:relative !important;
+  z-index:50 !important;
+}
+/* The Forfeit wrapper itself is NOT rotated. The supplied back artwork is
+   already horizontal. The front is portrait-source artwork and is rotated
+   inside the same landscape box so both faces occupy exactly the same box. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-wrap{
+  transform:none !important;
+  transform-origin:center center !important;
+  aspect-ratio:1403 / 910 !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-back{
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:contain !important;
+  transform:translate(-50%,-50%) !important;
+  transform-origin:center center !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-front{
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  width:65% !important;
+  height:154.2% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:contain !important;
+  transform:translate(-50%,-50%) rotate(-90deg) !important;
+  transform-origin:center center !important;
+}
+</style>
