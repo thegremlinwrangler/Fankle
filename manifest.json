@@ -1,0 +1,23 @@
+{
+  "name": "Fankle",
+  "short_name": "Fankle",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d0b0f",
+  "theme_color": "#17131a",
+  "icons": [
+    {
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhJuDK6pfilrSa3pjgkYVGxwB83hlD7349ki73BqL9Bh5GqXwzNS1CFvuFe8Z8irBNyJAygdtFsfwshgv_WQ1RoUDbsZ8S0iQnOqMzetPhq-Glk85n5Q0PGZmEcPDY1N2XP_XDB2UKLzz_f1e4COWeYEwGCL1uxoKaUfDGJE9iBKRSj46e12YSwQJdNLJI/s1600/Fav%20Icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhJuDK6pfilrSa3pjgkYVGxwB83hlD7349ki73BqL9Bh5GqXwzNS1CFvuFe8Z8irBNyJAygdtFsfwshgv_WQ1RoUDbsZ8S0iQnOqMzetPhq-Glk85n5Q0PGZmEcPDY1N2XP_XDB2UKLzz_f1e4COWeYEwGCL1uxoKaUfDGJE9iBKRSj46e12YSwQJdNLJI/s1600/Fav%20Icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
