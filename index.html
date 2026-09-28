@@ -2860,6 +2860,94 @@ document.addEventListener('keydown', function(e){
 </body>
 </html>
 
+<style id="fankle-v63-final-position-and-forfeit-back">
+/* V63: final positional correction.
+   Fankle rotation remains untouched. The supplied Forfeit BACK is already
+   horizontal, so it must never be rotated. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-stage{
+  padding-top:54px !important;
+  padding-bottom:20px !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+}
+/* Give the instruction its own space so the oversized dice cannot cover it. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-instruction{
+  margin:0 0 2px !important;
+  flex:0 0 auto !important;
+  position:relative !important;
+  z-index:20 !important;
+}
+/* The dice remain large; this is the allocated area, not a forced shrink of
+   the dice themselves. It prevents their 128px artwork from invading the
+   instruction or the next card. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-dice{
+  height:128px !important;
+  flex:0 0 128px !important;
+  gap:16px !important;
+  margin:0 !important;
+  overflow:visible !important;
+  position:relative !important;
+  z-index:5 !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-die{
+  width:128px !important;
+  height:128px !important;
+  flex:0 0 128px !important;
+}
+/* Keep the square Fankle card at its enlarged rigid size. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-wrap{
+  width:min(92vw,500px) !important;
+  height:auto !important;
+  aspect-ratio:1 / 1 !important;
+  flex:0 0 auto !important;
+  margin:0 auto !important;
+  position:relative !important;
+  overflow:hidden !important;
+}
+/* The Forfeit front remains the approved geometry. The BACK uses its supplied
+   horizontal orientation and occupies the exact same outer card box. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-wrap{
+  width:min(92vw,500px) !important;
+  height:auto !important;
+  aspect-ratio:1403 / 910 !important;
+  flex:0 0 auto !important;
+  margin:10px auto 0 !important;
+  position:relative !important;
+  overflow:hidden !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-back{
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:contain !important;
+  transform:translate(-50%,-50%) !important;
+  transform-origin:center center !important;
+}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-front{
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  width:65% !important;
+  height:154.2% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:contain !important;
+  transform:translate(-50%,-50%) rotate(-90deg) !important;
+  transform-origin:center center !important;
+}
+/* Preserve the approved Forfeit text treatment exactly; only its whole card
+   position changes with the wrapper above. */
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-text{
+  width:76% !important;
+  height:76% !important;
+}
+</style>
+
+
 
 <style id="fankle-v55-3-card-fix">
 /* V55.3 — mobile cards: CW 90°, image numbers, 80% text width. */
