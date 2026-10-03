@@ -1928,17 +1928,41 @@ html.fankle-mobile-boot #fankle-game-root{display:none !important;}
 html.fankle-mobile-boot #fankle-mobile-app{display:block !important;}
 </style>
 <script id="fankle-mobile-boot-script">
+/* One place decides the view, and it re-decides whenever the phone rotates:
+   portrait  -> mobile view (touch devices, or ?mobile=1)
+   landscape -> desktop/TV view
+   ?tv=1 / ?desktop=1 always forces the desktop view. */
 (function(){
-  try{
-    var q=new URLSearchParams(location.search);
-    var forcedDesktop=q.get('tv')==='1'||q.get('desktop')==='1';
-    if(forcedDesktop) document.documentElement.classList.add('fankle-forced-desktop');
-    var mobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) && matchMedia('(pointer:coarse)').matches;
-    var small=innerWidth<=680 && matchMedia('(pointer:coarse)').matches;
-    var browserLandscape=innerWidth > innerHeight;
-    if(browserLandscape) document.documentElement.classList.add('fankle-browser-landscape');
-    if(!forcedDesktop && !browserLandscape && (q.get('mobile')==='1'||mobile||small)) document.documentElement.classList.add('fankle-mobile-boot');
-  }catch(e){}
+  var root=document.documentElement, q=new URLSearchParams(location.search), t=null;
+  var forcedDesktop=q.get('tv')==='1'||q.get('desktop')==='1';
+  var forcedMobile=q.get('mobile')==='1';
+  function touchDevice(){
+    try{ return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)||matchMedia('(pointer:coarse)').matches; }
+    catch(e){ return false; }
+  }
+  function apply(){
+    var landscape=innerWidth>innerHeight;
+    var mobile=!forcedDesktop && !landscape && (forcedMobile||touchDevice());
+    root.classList.toggle('fankle-forced-desktop',forcedDesktop);
+    root.classList.toggle('fankle-browser-landscape',landscape);
+    root.classList.toggle('fankle-mobile-boot',mobile);
+    var app=document.getElementById('fankle-mobile-app');
+    if(app) app.setAttribute('aria-hidden',mobile?'false':'true');
+  }
+  function later(){
+    clearTimeout(t);
+    t=setTimeout(function(){
+      var a=document.activeElement;               /* on-screen keyboard shrinks the viewport: don't flip views while typing */
+      if(a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
+      apply();
+    },120);
+  }
+  try{ apply(); }catch(e){}
+  addEventListener('resize',later);
+  addEventListener('orientationchange',later);
+  document.addEventListener('focusout',later);
+  document.addEventListener('DOMContentLoaded',apply);
+  try{ matchMedia('(orientation: landscape)').addEventListener('change',later); }catch(e){}
 })();
 </script>
 
@@ -2510,11 +2534,9 @@ document.addEventListener('keydown', function(e){
   const forcedMobile=qs.get('mobile')==='1';
   const forcedDesktop=qs.get('tv')==='1' || qs.get('desktop')==='1';
   const mobileUA=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) && matchMedia('(pointer:coarse)').matches;
-  const browserLandscape=innerWidth > innerHeight;
-  const useMobile=!forcedDesktop && !browserLandscape && (forcedMobile || mobileUA || (innerWidth<=680 && matchMedia('(pointer:coarse)').matches));
-  if(browserLandscape) document.documentElement.classList.add('fankle-browser-landscape');
-  if(!useMobile) return;
-  desktop.style.display='none'; app.style.display='block'; app.setAttribute('aria-hidden','false');
+  /* Which view is showing is decided live by the boot script (portrait = mobile, landscape = desktop),
+     so this always initialises and just checks whether the mobile view is the one on screen. */
+  const viewIsMobile=()=>document.documentElement.classList.contains('fankle-mobile-boot');
 
   const ASSETS={
     cardFront:'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi-_DwixDM4D64OIwsSntzpXn92RtjhbQGHIvidJuPmuCWfGNC4B368nRNff219gt9O0QX91naKZ66zhjL9VYVG9jE1YIr0yKn_xUtL3ZXZE6EwHpRXDZ6zUpZuQ1CrtwqryNgPwitxaa8HRD1ojEz-6R765kQsTD0arZ23AfzeCZXwA/s1600/Blank%20fankle%20face.png',
@@ -2743,11 +2765,12 @@ document.addEventListener('keydown', function(e){
   window.addEventListener('resize',()=>{});
   window.addEventListener('keydown',e=>{if(e.key.toLowerCase()==='f'&&state.mode==='solo')toast('FANKLE test armed — roll!')});
   app.addEventListener('click',e=>{if(state.mode==='network'&&state.role==='dice'&&e.target.closest('.fm-die'))sendCommand('roll');if(state.mode==='remote'&&e.target.closest('.fm-die')){if(state.remoteConn)send(state.remoteConn,{t:'roll'});}});
-  app.addEventListener('touchend',e=>{if(state.mode==='solo'&&state.phase==='dice'&&!rolling){localRoll();}else if(state.mode==='remote'&&state.remoteConn){send(state.remoteConn,{t:'roll'});}}, {passive:true});
+  app.addEventListener('touchend',e=>{if(!viewIsMobile())return;if(state.mode==='solo'&&state.phase==='dice'&&!rolling){localRoll();}else if(state.mode==='remote'&&state.remoteConn){send(state.remoteConn,{t:'roll'});}}, {passive:true});
   let lastShake=0;
   function enableShake(){
     if(!('DeviceMotionEvent' in window)) return;
     window.addEventListener('devicemotion',e=>{
+      if(!viewIsMobile())return;
       if((state.mode!=='solo'&&state.mode!=='remote')||state.phase!=='dice'||rolling)return;
       const a=e.accelerationIncludingGravity;if(!a)return;
       const mag=Math.sqrt((a.x||0)**2+(a.y||0)**2+(a.z||0)**2);
@@ -3013,6 +3036,35 @@ document.addEventListener('keydown', function(e){
 }
 </style>
 
+
+<script id="fankle-desktop-forfeit-align">
+/* Desktop/TV layout: keeps the Forfeit button level with ROLL EM and the Forfeit
+   card level with the dice, whatever size the window is. Phone landscape has its
+   own fixed layout and ignores these variables. */
+(function(){
+  var zone=document.querySelector('#fankle-game-root .forfeit-zone');
+  var roll=document.getElementById('roll'), die=document.getElementById('die1');
+  var label=zone&&zone.querySelector('.forfeit-label');
+  if(!zone||!roll||!die||!label) return;
+  function align(){
+    var z=zone.getBoundingClientRect(), r=roll.getBoundingClientRect(), d=die.getBoundingClientRect();
+    if(!z.height||!r.height||!d.height) return;               /* hidden (mobile view) */
+    var lh=label.offsetHeight||65, gap=14, topEdge=52;
+    var btnCy=r.top+r.height/2-z.top;
+    var maxH=(btnCy-lh/2-gap)-topEdge;
+    var w=Math.max(120,Math.min(400,z.width*0.92,maxH));
+    var cy=d.top+d.height/2-z.top;
+    cy=Math.max(topEdge+w/2,Math.min(cy,btnCy-lh/2-gap-w/2));
+    zone.style.setProperty('--fk-btn-cy',btnCy+'px');
+    zone.style.setProperty('--fk-card-w',w+'px');
+    zone.style.setProperty('--fk-card-cy',cy+'px');
+  }
+  var raf=0; function soon(){ cancelAnimationFrame(raf); raf=requestAnimationFrame(align); }
+  addEventListener('resize',soon); addEventListener('orientationchange',soon); addEventListener('load',soon);
+  if(window.ResizeObserver){ var ro=new ResizeObserver(soon); ro.observe(zone); ro.observe(roll.parentNode); }
+  soon();
+})();
+</script>
 </body>
 </html>
 
@@ -3666,7 +3718,12 @@ document.addEventListener('keydown', function(e){
    the visual dice span on a normal phone, while remaining responsive. */
 #fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-wrap,
 #fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-forfeit-wrap{
-  width:min(88vw,468px) !important;
+  /* Width is capped by the height left on screen (everything above the decks + the
+     button and its gap below them), so the button is never pushed off the bottom.
+     294px = space above the Fankle card + gap between the decks + button gap + bottom margin;
+     .3444 = button height/width; .7714 = deck width/height share (1403:910, two decks). */
+  width:min(88vw,468px,max(150px,calc((100vh - 294px - env(safe-area-inset-bottom,0px) - min(43vw,205px) * .3444) * .7714))) !important;
+  width:min(88vw,468px,max(150px,calc((100dvh - 294px - env(safe-area-inset-bottom,0px) - min(43vw,205px) * .3444) * .7714))) !important;
   height:auto !important;
   aspect-ratio:1403 / 910 !important;
   flex:0 0 auto !important;
@@ -3839,22 +3896,7 @@ document.addEventListener('keydown', function(e){
 }
 </style>
 
-<style id="fankle-v65-spacing-final">
-/* V65: lock the approved Forfeit geometry. Adjust only the vertical composition.
-   The top gap is reduced by moving the upper stack upward; the Fankle card is
-   held at its existing screen position, deliberately increasing the dice→Fankle gap. */
-#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-stage{
-  padding-top:58px !important;
-}
-#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-wrap{
-  margin-top:30px !important;
-}
-/* Bring Roll Again upward without moving either deck. */
-#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-cta{
-  margin-top:8px !important;
-  transform:translateY(-6px) !important;
-}
-</style>
+
 
 <style id="fankle-v65-spacing-final">
 /* V65: lock the approved Forfeit geometry. Adjust only the vertical composition.
@@ -3863,7 +3905,7 @@ document.addEventListener('keydown', function(e){
 #fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-stage{padding-top:58px !important;}
 #fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-card-wrap{margin-top:30px !important;}
 /* Bring Roll Again upward without moving either deck. */
-#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-cta{margin-top:8px !important;transform:translateY(-18px) !important;}
+#fankle-mobile-app:not(.role-dice):not(.role-fankle):not(.role-forfeit):not(.role-remote) .fm-cta{margin-top:8px !important;transform:translateY(-6px) !important;}
 </style>
 
 <style id="fankle-v70-resin-menu">
@@ -4007,23 +4049,43 @@ html.fankle-browser-landscape #fankle-game-root .forfeit-card{
   display:grid !important;
   place-items:center !important;
 }
+/* The deck back is a horizontal picture: rotate it 90deg and give it exactly the
+   same box as the drawn Forfeit front (same width, same centre), so the card
+   doesn't change size or position when it flips. --fk-card-w / --fk-card-cy are
+   set by the small alignment script at the end of the page. */
 html.fankle-browser-landscape #fankle-game-root .forfeit-card .forfeit-deck-back{
-  width:min(180px,78%) !important;
-  max-width:100% !important;
+  position:absolute !important;
+  left:50% !important;
+  top:var(--fk-card-cy,50%) !important;
+  width:var(--fk-card-w,min(400px,92%)) !important;
   height:auto !important;
-  max-height:calc(100dvh - 120px) !important;
+  max-width:none !important;
+  max-height:none !important;
   object-fit:contain !important;
-  transform:none !important;
+  transform:translate(-50%,-50%) rotate(90deg) !important;
+  transform-origin:center center !important;
+}
+html.fankle-browser-landscape #fankle-game-root .forfeit-face{
+  width:var(--fk-card-w,min(400px,92%)) !important;
+  top:var(--fk-card-cy,50%) !important;
+}
+html.fankle-browser-landscape #fankle-game-root .forfeit-card.drawn .forfeit-text{
+  top:var(--fk-card-cy,50%) !important;
 }
 html.fankle-browser-landscape #fankle-game-root .forfeit-card.drawn{
   width:min(220px,86%) !important;
   height:auto !important;
   min-height:160px !important;
 }
+/* FORFEIT DECK button: vertically level with the ROLL EM button. */
 html.fankle-browser-landscape #fankle-game-root .forfeit-label{
   min-width:135px !important;
   padding:10px 18px !important;
-  bottom:54px !important;
+  position:absolute !important;
+  left:50% !important;
+  top:var(--fk-btn-cy,80%) !important;
+  bottom:auto !important;
+  transform:translate(-50%,-50%) !important;
   font-size:11px !important;
 }
 /* Desktop dice: same visual scale as the established desktop table, not
