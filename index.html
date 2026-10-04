@@ -1946,8 +1946,29 @@ html.fankle-mobile-boot #fankle-mobile-app{display:block !important;}
     root.classList.toggle('fankle-forced-desktop',forcedDesktop);
     root.classList.toggle('fankle-browser-landscape',landscape);
     root.classList.toggle('fankle-mobile-boot',mobile);
+    var touch=touchDevice();
+    root.classList.toggle('fankle-rotate-prompt',forcedDesktop && !landscape && touch);
+    /* A phone on its side: show the real desktop table inside a frame laid out at desktop size and shrunk to fit
+       (the desktop layout never sees a tiny screen). Tablets, desktops and the frame itself are left alone. */
+    var phone=Math.min(screen.width||9999,screen.height||9999)<700;
+    var framed=landscape && touch && phone && q.get('frame')!=='1';
+    root.classList.toggle('fankle-phone-landscape',framed);
+    if(framed) fitFrame();
     var app=document.getElementById('fankle-mobile-app');
     if(app) app.setAttribute('aria-hidden',mobile?'false':'true');
+  }
+  function fitFrame(){
+    var f=document.getElementById('fankle-landscape-frame');
+    if(!f){
+      if(!document.body) return;
+      f=document.createElement('iframe'); f.id='fankle-landscape-frame'; f.setAttribute('title','Fankle table');
+      f.src=location.pathname+(forcedDesktop&&q.get('tv')==='1'?'?tv=1&frame=1':'?desktop=1&frame=1');
+      document.body.appendChild(f);
+    }
+    /* design size is at least 1200 x 600; scale it down to the phone's real viewport */
+    var S=Math.min(innerWidth/1200,innerHeight/600);
+    f.style.width=Math.round(innerWidth/S)+'px'; f.style.height=Math.round(innerHeight/S)+'px';
+    f.style.transform='scale('+S+')';
   }
   function later(){
     clearTimeout(t);
@@ -1961,7 +1982,14 @@ html.fankle-mobile-boot #fankle-mobile-app{display:block !important;}
   addEventListener('resize',later);
   addEventListener('orientationchange',later);
   document.addEventListener('focusout',later);
-  document.addEventListener('DOMContentLoaded',apply);
+  document.addEventListener('DOMContentLoaded',function(){
+    apply();
+    if(!document.getElementById('fankle-rotate-prompt')){
+      var d=document.createElement('div'); d.id='fankle-rotate-prompt';
+      d.innerHTML='<div class="rp-icon">&#8635;</div><h2>TV VIEW</h2><p>Turn your phone sideways to see the full table.</p><a href="'+location.pathname+'">BACK TO PHONE VIEW</a>';
+      document.body.appendChild(d);
+    }
+  });
   try{ matchMedia('(orientation: landscape)').addEventListener('change',later); }catch(e){}
 })();
 </script>
@@ -1985,6 +2013,23 @@ html.fankle-browser-landscape #fankle-mobile-app{display:none !important;}
 #fankle-game-root .card-face.card-back img.base{
   transform:rotate(90deg) !important;
 }
+</style>
+<style id="fankle-rotate-prompt-style">
+#fankle-rotate-prompt{display:none;position:fixed;inset:0;z-index:99999;background:#120d14;color:#fff;font-family:Georgia,serif;text-align:center;flex-direction:column;align-items:center;justify-content:center;padding:28px;gap:10px}
+#fankle-rotate-prompt .rp-icon{font-size:64px;line-height:1;color:#ffb347;transform:rotate(90deg)}
+#fankle-rotate-prompt h2{margin:6px 0 0;letter-spacing:.18em;font-size:20px}
+#fankle-rotate-prompt p{margin:0 0 14px;font:16px/1.4 Arial,sans-serif;color:#d8cbe0;max-width:260px}
+#fankle-rotate-prompt a{color:#fff;text-decoration:none;font:700 12px Arial,sans-serif;letter-spacing:.12em;border:1px solid #8e68a4;border-radius:999px;padding:11px 18px;background:#261e2b}
+html.fankle-rotate-prompt #fankle-rotate-prompt{display:flex}
+html.fankle-rotate-prompt #fankle-game-root,html.fankle-rotate-prompt #fankle-mobile-app,html.fankle-rotate-prompt #fankle-tv-remote-code{display:none !important}
+</style>
+<style id="fankle-landscape-frame-style">
+#fankle-landscape-frame{display:none;position:fixed;left:0;top:0;border:0;margin:0;padding:0;transform-origin:0 0;z-index:9990;background:#120d14}
+html.fankle-phone-landscape,html.fankle-phone-landscape body{overflow:hidden !important;background:#120d14}
+html.fankle-phone-landscape #fankle-landscape-frame{display:block}
+html.fankle-phone-landscape.fankle-browser-landscape #fankle-game-root,
+html.fankle-phone-landscape.fankle-browser-landscape #fankle-mobile-app,
+html.fankle-phone-landscape.fankle-browser-landscape #fankle-tv-remote-code{display:none !important}
 </style>
 </head>
 <body>
@@ -2389,8 +2434,9 @@ html.fankle-browser-landscape #fankle-mobile-app{display:none !important;}
   const q=new URLSearchParams(location.search);
   if(q.get('tv')!=='1'||typeof Peer==='undefined'||!window.FankleCore)return;
   const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let code='';for(let i=0;i<4;i++)code+=chars[Math.floor(Math.random()*chars.length)];
-  const badge=document.getElementById('fankle-tv-remote-code'),val=document.getElementById('fankle-tv-remote-code-value');
-  if(badge&&val){val.textContent=code;badge.style.display='block';badge.setAttribute('aria-hidden','false');}
+  const showCode=()=>{const badge=document.getElementById('fankle-tv-remote-code'),val=document.getElementById('fankle-tv-remote-code-value');
+    if(badge&&val){val.textContent=code;badge.style.display='block';badge.setAttribute('aria-hidden','false');}};
+  showCode(); document.addEventListener('DOMContentLoaded',showCode);   /* badge is further down the page, so also run once it exists */
   const peer=new Peer('fktv-'+code);
   peer.on('connection',conn=>{
     conn.on('data',m=>{if(m&&m.t==='roll'){window.FankleCore.roll();setTimeout(()=>{const s=window.FankleCore.snapshot();if(conn.open)conn.send({t:'dice',die1:s.die1,die2:s.die2,total:s.total});},1400);}});
@@ -2474,7 +2520,7 @@ document.addEventListener('keydown', function(e){
 #fankle-mobile-app .fm-win-burst{font-size:clamp(62px,18vw,150px);font-weight:900;line-height:.9;background:linear-gradient(135deg,#ffd34e,#ff6a00,#c23cff,#ff3fb4);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 5px 20px rgba(255,80,180,.35);transform:rotate(-8deg);}
 #fankle-mobile-app .fm-win-caption{margin-top:25px;font-size:clamp(18px,4vw,32px);font-weight:900;text-align:center;}
 @keyframes fm-win-pulse{from{box-shadow:inset 0 0 40px rgba(255,170,0,.15)}to{box-shadow:inset 0 0 140px rgba(190,50,255,.35)}}
-#fankle-mobile-app .fm-toast{position:absolute;top:44px;left:50%;transform:translateX(-50%);background:#261e2b;border:1px solid #8e68a4;border-radius:999px;padding:7px 13px;font:700 11px Arial;opacity:0;transition:.25s;z-index:80;pointer-events:none;white-space:nowrap}
+#fankle-mobile-app .fm-toast{position:absolute;top:44px;left:50%;transform:translateX(-50%);background:#261e2b;border:1px solid #8e68a4;border-radius:999px;padding:9px 16px;font:700 13px Arial;opacity:0;transition:.25s;z-index:200;pointer-events:none;white-space:nowrap}
 #fankle-mobile-app .fm-toast.show{opacity:1}
 #fankle-mobile-app.role-dice .fm-card-wrap,#fankle-mobile-app.role-dice .fm-forfeit-wrap,#fankle-mobile-app.role-dice .fm-cta{display:none}
 #fankle-mobile-app.role-fankle .fm-dice,#fankle-mobile-app.role-fankle .fm-instruction,#fankle-mobile-app.role-fankle .fm-forfeit-wrap{display:none}
@@ -2556,7 +2602,7 @@ document.addEventListener('keydown', function(e){
   const state={phase:'dice',die1:1,die2:1,total:2,card:null,forfeit:null,cta:false,mode:'solo',role:'dice',code:null,peer:null,remoteConn:null,connections:new Map(),host:false,meshIds:[],roles:{}};
   let ctaTimer=null, rolling=false, dicePauseTimer=null, peerReady=false;
   const DICE_LAND_PAUSE=1800;
-  const toast=(s)=>{ $('fmToast').textContent=s; $('fmToast').classList.add('show'); setTimeout(()=>$('fmToast').classList.remove('show'),2200); };
+  const toast=(s)=>{ $('fmToast').textContent=s; $('fmToast').classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>$('fmToast').classList.remove('show'),2800); };
 
   function setPips(el,n){
     const grid=el.querySelector('.fm-pips'); grid.innerHTML='';
@@ -2653,18 +2699,18 @@ document.addEventListener('keydown', function(e){
   function localForfeit(){if(state.phase!=='card' && state.phase!=='forfeit')return;if(window.FankleCore){window.FankleCore.drawForfeit();setTimeout(()=>{const s=window.FankleCore.snapshot();state.forfeit=s.forfeitText;state.phase='forfeit';state.card=state.card;render();broadcastState();},50);}else{state.forfeit='Forfeit!';state.phase='forfeit';render();broadcastState();}}
   function ctaAction(k){if(state.mode==='network'){sendCommand(k);return;} if(k==='forfeit'){localForfeit();} else {state.card=null;state.forfeit=null;state.phase='dice';render();}}
 
-  function startRemote(code){code=(code||'').trim().toUpperCase();if(code.length!==4){toast('Enter the 4-letter TV code');return;}if(typeof Peer==='undefined'){toast('Remote library did not load');return;}state.mode='remote';state.role='remote';state.code=code;app.classList.add('role-remote');state.peer=new Peer();state.peer.on('open',()=>{const c=state.peer.connect('fktv-'+code,{reliable:true});state.remoteConn=c;c.on('open',()=>{hideNetwork();toast('Connected to TV');});c.on('data',m=>{if(m&&m.t==='dice'){state.die1=m.die1;state.die2=m.die2;state.total=m.total;renderDice();}});c.on('close',()=>toast('TV remote disconnected'));});state.peer.on('error',()=>toast('Could not connect to that TV'));}
-  function showRemote(){showNetwork('<h2>DICE REMOTE</h2><p>Enter the 4-letter code shown on the TV.</p><input class="fm-network-input" id="fmTvCode" maxlength="4" autocomplete="off" placeholder="ABCD"><div class="fm-network-actions"><button id="fmRemoteGo">CONNECT</button><button class="secondary" id="fmNetClose">CANCEL</button></div>');$('fmRemoteGo').onclick=()=>startRemote($('fmTvCode').value);$('fmNetClose').onclick=hideNetwork;}
+  function startRemote(code){code=(code||'').trim().toUpperCase();if(code.length!==4){toast('Enter the 4-letter TV code');return;}if(typeof Peer==='undefined'){toast('Remote library did not load');return;}state.mode='remote';state.role='remote';state.code=code;app.classList.add('role-remote');state.peer=new Peer();let linked=false;state.peer.on('open',()=>{const c=state.peer.connect('fktv-'+code,{reliable:true});state.remoteConn=c;c.on('open',()=>{linked=true;hideNetwork();toast('Connected to TV');});c.on('data',m=>{if(m&&m.t==='dice'){state.die1=m.die1;state.die2=m.die2;state.total=m.total;renderDice();}});c.on('close',()=>toast('TV remote disconnected'));});state.peer.on('error',e=>{if(linked)return;state.mode='solo';app.classList.remove('role-remote');toast(e&&e.type==='peer-unavailable'?'No TV found with that code':'Could not connect to that TV')});}
+  function showRemote(){showNetwork('<h2>DICE REMOTE</h2><p>Enter the 4-letter code shown on the TV.</p><input class="fm-network-input" id="fmTvCode" maxlength="4" autocomplete="off" placeholder="ABCD"><div class="fm-network-actions"><button id="fmRemoteGo">CONNECT</button><button class="secondary" id="fmNetClose">CANCEL</button></div>');$('fmRemoteGo').onclick=()=>{const c=($('fmTvCode').value||'').trim().toUpperCase();if(c.length===4)toast('Connecting to TV '+c+'...');startRemote(c)};$('fmNetClose').onclick=hideNetwork;}
   function showNetwork(html){$('fmNetworkCard').innerHTML=html;$('fmNetworkPanel').classList.add('open');}
   function hideNetwork(){ $('fmNetworkPanel').classList.remove('open'); }
   function roleButtons(prefix='') {return `<div class="fm-role-grid"><button data-role="dice">DICE</button><button data-role="fankle">FANKLE</button><button data-role="forfeit">FORFEIT</button></div>`}
-  function wireRoleButtons(){document.querySelectorAll('#fmNetworkCard [data-role]').forEach(b=>b.onclick=()=>{state.role=b.dataset.role; if(state.host) hostStart(); else joinStart();});}
+  function wireRoleButtons(){document.querySelectorAll('#fmNetworkCard [data-role]').forEach(b=>b.onclick=()=>{state.role=b.dataset.role; hostStart();});}
 
   function createGame(){
     showNetwork(`<h2>CREATE 3-PHONE GAME</h2><p>Choose what this phone will be.</p>${roleButtons()}<p class="fm-small">This phone coordinates the session in the background. The other phones can join with the code.</p><button class="secondary" id="fmNetClose">CANCEL</button>`);wireRoleButtons();$('fmNetClose').onclick=hideNetwork;
   }
   function joinGame(){
-    showNetwork(`<h2>JOIN GAME</h2><p>Enter the 4-letter game code.</p><input class="fm-network-input" id="fmJoinCode" maxlength="4" autocomplete="off" placeholder="ABCD"><div class="fm-role-grid"><button data-role="dice">DICE</button><button data-role="fankle">FANKLE</button><button data-role="forfeit">FORFEIT</button></div><div class="fm-network-actions"><button id="fmJoinGo">JOIN GAME</button><button class="secondary" id="fmNetClose">CANCEL</button></div>`);$('fmJoinGo').onclick=()=>{const code=$('fmJoinCode').value.trim().toUpperCase();const role=document.querySelector('#fmNetworkCard [data-role].selected')?.dataset.role||state.role;if(code.length!==4){toast('Enter the 4-letter code');return} startGuest(code,role)};document.querySelectorAll('#fmNetworkCard [data-role]').forEach(b=>b.onclick=()=>{document.querySelectorAll('#fmNetworkCard [data-role]').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');state.role=b.dataset.role});$('fmNetClose').onclick=hideNetwork;
+    showNetwork(`<h2>JOIN GAME</h2><p>Enter the 4-letter game code.</p><input class="fm-network-input" id="fmJoinCode" maxlength="4" autocomplete="off" placeholder="ABCD"><div class="fm-role-grid"><button data-role="dice">DICE</button><button data-role="fankle">FANKLE</button><button data-role="forfeit">FORFEIT</button></div><div class="fm-network-actions"><button id="fmJoinGo">JOIN GAME</button><button class="secondary" id="fmNetClose">CANCEL</button></div>`);$('fmJoinGo').onclick=()=>{const code=$('fmJoinCode').value.trim().toUpperCase();const role=document.querySelector('#fmNetworkCard [data-role].selected')?.dataset.role||state.role;if(code.length!==4){toast('Enter the 4-letter code');return} toast('Looking for game '+code+'...'); startGuest(code,role)};document.querySelectorAll('#fmNetworkCard [data-role]').forEach(b=>b.onclick=()=>{document.querySelectorAll('#fmNetworkCard [data-role]').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');state.role=b.dataset.role});$('fmNetClose').onclick=hideNetwork;
   }
   function makeCode(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<4;i++)s+=chars[Math.floor(Math.random()*chars.length)];return s;}
   function send(conn,msg){try{if(conn&&conn.open)conn.send(msg)}catch(e){}}
@@ -2728,10 +2774,11 @@ document.addEventListener('keydown', function(e){
     peer.on('error',e=>toast('Network: '+(e.type||'connection error')));
   }
   function startGuest(code,role){
-    state.mode='network';state.host=false;state.code=code;state.role=role;state.meshIds=[];state.roles={};state.peer=new Peer();
-    state.peer.on('open',()=>{const conn=state.peer.connect('fk-'+code,{reliable:true});attachConn(conn);conn.on('open',()=>{send(conn,{t:'hello',id:selfId(),role});hideNetwork();app.classList.add('network-wait');toast('Joined '+code);});});
+    if(typeof Peer==='undefined'){toast('Network library did not load - check your connection');return}
+    state.mode='network';state.host=false;state.code=code;state.role=role;state.meshIds=[];state.roles={};state.peer=new Peer();let joined=false;
+    state.peer.on('open',()=>{const conn=state.peer.connect('fk-'+code,{reliable:true});attachConn(conn);conn.on('open',()=>{joined=true;send(conn,{t:'hello',id:selfId(),role});hideNetwork();app.classList.add('network-wait');toast('Joined '+code);});});
     state.peer.on('connection',conn=>attachConn(conn));
-    state.peer.on('error',()=>toast('Could not join that game'));
+    state.peer.on('error',e=>{if(joined)return;state.mode='solo';toast(e&&e.type==='peer-unavailable'?'No game found with that code':'Could not join that game')});
   }
   function hostRoll(){
     if(!isCoordinator()||rolling)return; rolling=true;clearCTA();
@@ -2765,7 +2812,7 @@ document.addEventListener('keydown', function(e){
   window.addEventListener('resize',()=>{});
   window.addEventListener('keydown',e=>{if(e.key.toLowerCase()==='f'&&state.mode==='solo')toast('FANKLE test armed — roll!')});
   app.addEventListener('click',e=>{if(state.mode==='network'&&state.role==='dice'&&e.target.closest('.fm-die'))sendCommand('roll');if(state.mode==='remote'&&e.target.closest('.fm-die')){if(state.remoteConn)send(state.remoteConn,{t:'roll'});}});
-  app.addEventListener('touchend',e=>{if(!viewIsMobile())return;if(state.mode==='solo'&&state.phase==='dice'&&!rolling){localRoll();}else if(state.mode==='remote'&&state.remoteConn){send(state.remoteConn,{t:'roll'});}}, {passive:true});
+  app.addEventListener('touchend',e=>{if(!viewIsMobile())return;if(e.target.closest&&e.target.closest('#fmNetworkPanel,#fmMenu'))return;if(state.mode==='solo'&&state.phase==='dice'&&!rolling){localRoll();}else if(state.mode==='remote'&&state.remoteConn){send(state.remoteConn,{t:'roll'});}}, {passive:true});
   let lastShake=0;
   function enableShake(){
     if(!('DeviceMotionEvent' in window)) return;
